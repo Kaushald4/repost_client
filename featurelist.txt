@@ -16,6 +16,7 @@ Privacy settings
 
 Block users
 
+
 Mute users
 
 🏘️ Communities (Subreddits)

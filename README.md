@@ -11,166 +11,224 @@ A modern, Reddit-inspired social platform built with Next.js 15, featuring a bea
 - **State Management**: Zustand
 - **Icons**: Lucide React
 - **Date Handling**: date-fns
+- **Networking**: Axios
 
 ## 📁 Project Structure
 
 ```
-repost/
-├── app/                      # Next.js app directory
-│   ├── explore/             # Community discovery page
-│   ├── messages/            # Direct messaging interface
-│   ├── notifications/       # Notifications center
-│   ├── post/[id]/          # Individual post view
-│   ├── r/[community]/      # Community pages
-│   ├── submit/              # Create post page
-│   ├── u/[username]/       # User profile pages
-│   ├── layout.tsx          # Root layout
-│   └── page.tsx            # Home feed
+client/
+├── app/                      # Next.js app directory (Routes)
+│   ├── communities/         # Community browsing
+│   ├── explore/             # Discovery page
+│   ├── login/               # Authentication
+│   ├── messages/            # Direct messaging
+│   ├── notifications/       # User notifications
+│   ├── post/                # Post details
+│   ├── r/                   # Community pages (dynamic)
+│   ├── search/              # Search functionality
+│   ├── settings/            # User settings
+│   ├── u/                   # User profiles (dynamic)
+│   └── layout.tsx           # Root layout
 ├── components/              # React components
-│   ├── ui/                 # Shadcn UI components
-│   ├── app-header.tsx      # Navigation header
-│   ├── app-layout.tsx      # Main layout wrapper
-│   ├── comment-item.tsx    # Comment component
-│   ├── feed-filters.tsx    # Feed sorting controls
-│   ├── post-card.tsx       # Post display component
-│   ├── sidebar.tsx         # Navigation sidebar
-│   └── theme-toggle.tsx    # Dark/light mode toggle
-├── data/                    # Mock data
-│   └── mock-data.ts        # Dummy data for development
-├── services/               # API service layer
-│   ├── comment.service.ts  # Comment operations
-│   ├── community.service.ts # Community operations
-│   ├── message.service.ts  # Messaging operations
-│   ├── notification.service.ts # Notification operations
-│   └── post.service.ts     # Post operations
-├── stores/                 # Zustand state stores
-│   ├── community.store.ts  # Community state
-│   ├── notification.store.ts # Notification state
-│   ├── post.store.ts       # Post state
-│   └── user.store.ts       # User authentication state
-├── types/                  # TypeScript type definitions
-│   └── index.ts           # Core type definitions
-└── lib/                   # Utility functions
-    └── utils.ts          # Helper functions
+│   ├── auth/                # Authentication forms & modals
+│   ├── header/              # Navigation & actions
+│   ├── ui/                  # Reusable UI components (Shadcn)
+│   └── ...                  # Feature-specific components
+├── hooks/                   # Custom React hooks
+├── lib/                     # Utilities & helpers
+├── services/                # API service integration
+├── stores/                  # Global state management (Zustand)
+└── types/                   # TypeScript definitions
 ```
-
-## ✨ Features Implemented
-
-### Core Features
-
-- ✅ **Home Feed** - Dynamic post feed with multiple sorting options (Hot, New, Top, Trending)
-- ✅ **Communities** - Browse, join, and participate in communities
-- ✅ **Posts** - Create and interact with text, image, and poll posts
-- ✅ **Comments** - Nested comment threads with voting
-- ✅ **User Profiles** - View user stats, reputation, and post history
-- ✅ **Direct Messaging** - Real-time conversation interface
-- ✅ **Notifications** - Activity notifications with read/unread states
-- ✅ **Search & Discovery** - Explore communities page
-
-### UI/UX Features
-
-- ✅ **Responsive Design** - Mobile-first approach with desktop optimization
-- ✅ **Dark Mode** - Full dark/light theme support
-- ✅ **Sidebar Navigation** - Persistent navigation with community shortcuts
-- ✅ **Vote System** - Upvote/downvote functionality for posts and comments
-- ✅ **Post Interactions** - Save, share, and comment features
 
 ## 🚦 Getting Started
 
 ### Prerequisites
 
 - Node.js 18+
-- npm or yarn
+- npm, yarn, or pnpm
 
 ### Installation
 
-1. Install dependencies:
+1. Clone the repository:
 
-```bash
-npm install
-```
+   ```bash
+   git clone <repository-url>
+   cd repost/client
+   ```
 
-2. Run the development server:
+2. Install dependencies:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+   ```bash
+   npm install
+   # or
+   yarn install
+   # or
+   pnpm install
+   ```
 
-3. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. Set up environment variables:
+   Create a `.env.local` file in the root directory and add necessary variables (API endpoints, etc.).
 
-## 📦 Available Pages
+4. Run the development server:
 
-- `/` - Home feed
-- `/explore` - Discover communities
-- `/r/[community]` - Community pages
-- `/post/[id]` - Individual post view
-- `/u/[username]` - User profiles
-- `/submit` - Create new post (Now a modal)
-- `/messages` - Direct messages
-- `/notifications` - Notification center
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   # or
+   pnpm dev
+   ```
 
-## 🎯 Key Features
+5. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-### Post Types
+---
 
-- **Text Posts** - Rich text content
-- **Image Posts** - Image upload with captions
-- **Poll Posts** - Interactive polls with real-time results
+## ✅ Implementation Status
 
-### Interaction
+### User Accounts & Identity
 
-- Upvote/Downvote system
-- Nested comments
-- Save posts
-- Share functionality
+- [x] Register (Email signup)
+- [x] Login
+- [x] Token Refresh
+- [ ] OAuth signup (Google, Apple, etc.)
+- [ ] Username system
+- [ ] User profiles
+- [ ] Avatar & profile banner
+- [ ] Short bio
+- [ ] Privacy settings
+- [ ] Block users
+- [ ] Mute users
 
-### Community
+### 🏘️ Communities (Subreddits)
 
-- Join/Leave communities
-- Community rules and moderation
-- Health score tracking
+- [ ] Create communities
+- [ ] Join / leave communities
+- [ ] Community rules
+- [ ] Community descriptions
+- [ ] Community banners & icons
+- [ ] Follow communities
+- [ ] Moderator roles & permissions
+- [ ] Community health score
 
-### User System
+### 📝 Posts
 
-- Reputation scores (Helper, Debate, Creative)
-- Karma system
-- Level progression
-- Achievement badges
+- [ ] Text posts
+- [ ] Image posts
+- [ ] Poll posts
+- [ ] Short video posts (future)
+- [ ] Multi-format posts (text + poll + media)
+- [ ] Edit / delete posts
+- [ ] Anonymous posting (per post)
+- [ ] Post flair / tags
+- [ ] Post views counter
 
-## 🔄 State Management
+### 💬 Comments & Discussions
 
-The app uses **Zustand** for state management with the following stores:
+- [ ] Nested comment threads
+- [ ] Edit / delete comments
+- [ ] Upvote / downvote comments
+- [ ] Quote / reply to comments
+- [ ] AI-assisted reply suggestions
+- [ ] Respectful counter-argument suggestions
 
-- **User Store** - Authentication and profile
-- **Post Store** - Feed and post data
-- **Community Store** - Community membership
-- **Notification Store** - Notifications
+### 📰 Feed & Discovery
 
-## 🎨 Customization
+- [ ] Home feed
+- [ ] Community feeds
+- [ ] Sorting options (Hot, New, Top)
+- [ ] Personalized feed
+- [ ] AI feed curator
+- [ ] Trending topics
+- [ ] Topic-based discovery
+- [ ] Rabbit Hole mode (endless related content)
+- [ ] Topic maps (visual relationship graph)
 
-The app uses Tailwind CSS and Shadcn/ui components. You can customize:
+### 🔍 Search
 
-- Colors in `tailwind.config.ts`
-- Component styles in `components/ui/`
-- Theme in `app/globals.css`
+- [ ] Search posts
+- [ ] Search communities
+- [ ] Search users
+- [ ] Filter by popularity / time
 
-## 📝 Learn More
+### 💬 Chat & Messaging
 
-To learn more about Next.js, take a look at the following resources:
+- [ ] 1-on-1 direct messages
+- [ ] Community group chats
+- [ ] Topic-based live chats
+- [ ] Temporary / disappearing chats
+- [ ] Voice chat (future)
+- [ ] Mute conversations
+- [ ] Block users in chat
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 🔔 Notifications
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- [ ] Post replies
+- [ ] Comment replies
+- [ ] Mentions
+- [ ] Upvotes
+- [ ] Chat messages
+- [ ] Community announcements
+- [ ] Notification settings
 
-## Deploy on Vercel
+### 🤖 AI Features
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- [ ] AI thread summaries (TL;DR)
+- [ ] Pros vs Cons summaries
+- [ ] AI post improvement
+- [ ] AI title suggestions
+- [ ] AI comment suggestions
+- [ ] AI-generated visuals (memes, cards, infographics)
+- [ ] AI debate assistant
+- [ ] AI research assistant
+- [ ] Personal AI learning agent
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 🧠 Agent Integrations
+
+- [ ] Research agent (summarize discussions & sources)
+- [ ] Moderator agent (flags issues, suggests rule updates)
+- [ ] Feed curation agent
+- [ ] Personal interest & learning agent
+
+### 🏆 Reputation & Gamification
+
+- [ ] Reputation / karma system
+- [ ] Helper score
+- [ ] Debate score
+- [ ] Creative score
+- [ ] Profile badges
+- [ ] Levels & progression
+- [ ] Feature unlocks via levels
+- [ ] Community quests
+- [ ] Achievements
+
+### 🛡️ Moderation & Safety
+
+- [ ] Report posts/comments
+- [ ] Remove posts/comments
+- [ ] Ban / mute users
+- [ ] Temporary bans
+- [ ] AI spam detection
+- [ ] AI toxicity detection
+- [ ] Moderator dashboards
+- [ ] Mod action logs
+
+### 🎨 Creator Tools
+
+- [ ] Post drafts
+- [ ] Content scheduling
+- [ ] Post analytics
+- [ ] Remix / quote post feature
+- [ ] Cross-posting tools
+- [ ] AI content enhancement
+
+### ⚙️ General Platform Features
+
+- [ ] Mobile-first responsive UI
+- [ ] Dark / light mode
+- [ ] Fast caching & performance optimization
+- [ ] Accessibility support
+- [ ] Screen-time reminders (optional)
+- [ ] Quality-focused feed mode
+- [ ] App analytics
+- [ ] Admin dashboard
