@@ -2,6 +2,8 @@
 
 A modern, Reddit-inspired social platform built with Next.js 15, featuring a beautiful UI, real-time interactions, and community-driven content.
 
+**Backend Repository:** [https://github.com/Kaushald4/repost_server](https://github.com/Kaushald4/repost_server)
+
 ## 🚀 Tech Stack
 
 - **Framework**: Next.js 15 with App Router
