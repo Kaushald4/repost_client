@@ -8,3 +8,7 @@ export const AUTH_ENDPOINT = {
 export const MEDIA_ENDPOINT = {
   UPLOAD_MEDIA: "/media/upload",
 };
+
+export const USER_ENDPOINT = {
+  UPDATE_PROFILE: "/user/update-user",
+};
