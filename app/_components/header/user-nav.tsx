@@ -11,34 +11,13 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LoginModal } from "@/components/auth/login-modal";
 import { SignupModal } from "@/components/auth/signup-modal";
-import { ProfileService } from "@/services/profile/profile.server";
-import { cookies, headers } from "next/headers";
+import { getServerCachedProfile } from "@/services/profile/profile.cache";
+import LogoutButton from "@/components/auth/logout-button";
 
 export default async function UserNav() {
-  // const { data: currentUser } = useUserSuspense();
-  // const currentUser = await ProfileService.getProfile();
+  const userData = await getServerCachedProfile();
 
-  // const h = await headers();
-  // const cookieStore = await cookies();
-
-  // const protocol = h.get("x-forwarded-proto") ?? "http";
-  // const host = h.get("x-forwarded-host") ?? h.get("host");
-
-  // const origin = `${protocol}://${host}`;
-
-  // const res = await fetch(`${origin}/api/proxy/user/user-info`, {
-  //   cache: "no-store",
-  //   credentials: "include",
-  //   headers: {
-  //     cookie: h.get("cookie") ?? "",
-  //     Authorization: `Bearer ${cookieStore.get("access_token")?.value ?? ""}`,
-  //   },
-  // });
-  // // console.log(res.ok);
-  // const userData = await res.json();
-  // console.log(userData, "userdata");
-
-  if (true) {
+  if (userData && !userData.success) {
     return (
       <div className="flex items-center gap-2">
         <LoginModal />
@@ -47,15 +26,15 @@ export default async function UserNav() {
     );
   }
 
+  const currentUser = userData!.data;
+
   return (
     <DropdownMenu>
-      {/* <DropdownMenuTrigger asChild>
+      <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon" className="rounded-full">
           <Avatar className="h-8 w-8">
-            <AvatarImage src={currentUser.avatar} />
-            <AvatarFallback>
-              {currentUser.username.slice(0, 2).toUpperCase()}
-            </AvatarFallback>
+            <AvatarImage src={currentUser.avatar.url} />
+            <AvatarFallback>{currentUser.username.slice(0, 2).toUpperCase()}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
@@ -63,9 +42,7 @@ export default async function UserNav() {
         <DropdownMenuLabel>
           <div className="flex flex-col gap-1">
             <p className="font-medium">{currentUser.displayName}</p>
-            <p className="text-xs text-muted-foreground">
-              @{currentUser.username}
-            </p>
+            <p className="text-xs text-muted-foreground">@{currentUser.username}</p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
@@ -79,8 +56,8 @@ export default async function UserNav() {
           <Link href="/saved">Saved Posts</Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => logout()}>Log out</DropdownMenuItem>
-      </DropdownMenuContent> */}
+        <LogoutButton />
+      </DropdownMenuContent>
     </DropdownMenu>
   );
 }

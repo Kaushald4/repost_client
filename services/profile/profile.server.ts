@@ -4,7 +4,7 @@ import { ProfileFormDataWithoutFiles } from "@/types/profileTypes";
 import { TUserResponseWrapper } from "@/types/register";
 import { UserAPI } from "./profile.api";
 
-export class ProfileService {
+export class ProfileServerService {
   static readonly baseURL = process.env.API_BASE_URL;
 
   static updateProfile = async (data: ProfileFormDataWithoutFiles) => {
@@ -17,10 +17,9 @@ export class ProfileService {
   };
 
   static getProfile = async (): Promise<TUserResponseWrapper> => {
-    const response = await serverFetch(
-      `${ProfileService.baseURL}${UserAPI.getProfile}`,
-      { cache: "no-store" }
-    );
+    const response = await serverFetch(`${ProfileServerService.baseURL}${UserAPI.getProfile}`, {
+      cache: "no-store",
+    });
     const userData = await response.json();
     return userData as TUserResponseWrapper;
   };

@@ -5,36 +5,29 @@ import setCookieParser from "set-cookie-parser";
 
 export async function middleware(request: NextRequest) {
   const requestHeaders = new Headers(request.headers);
-  requestHeaders.set(
-    "x-current-path",
-    request.nextUrl.pathname + request.nextUrl.search
-  );
+  requestHeaders.set("x-current-path", request.nextUrl.pathname + request.nextUrl.search);
   const cookieStore = request.cookies;
   const refreshTokenId = cookieStore.get("refresh_token_id")?.value;
+  const accessToken = cookieStore.get("access_token")?.value;
 
-  if (refreshTokenId && !request.nextUrl.pathname.includes("/login")) {
-    const authRes = await fetch(
-      `${process.env.API_BASE_URL}${AUTH_ENDPOINT.REFRESH}`,
-      {
-        method: "POST",
+  if (!accessToken && refreshTokenId && !request.nextUrl.pathname.includes("/login")) {
+    const authRes = await fetch(`${process.env.API_BASE_URL}${AUTH_ENDPOINT.REFRESH}`, {
+      method: "POST",
 
-        body: JSON.stringify({ refreshTokenId }),
-        headers: {
-          cookie: request.headers.get("cookie") || "",
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      }
-    );
+      body: JSON.stringify({ refreshTokenId }),
+      headers: {
+        cookie: request.headers.get("cookie") || "",
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
     const res = NextResponse.next();
 
     // this is getting used in the login action to set cookies aslo
     // TDOD: refactor to avoid duplication
     const setCookies =
       authRes.headers.getSetCookie?.() ??
-      (authRes.headers.get("set-cookie")
-        ? [authRes.headers.get("set-cookie")!]
-        : []);
+      (authRes.headers.get("set-cookie") ? [authRes.headers.get("set-cookie")!] : []);
     const parsed = setCookieParser.parse(setCookies);
 
     for (const c of parsed) {

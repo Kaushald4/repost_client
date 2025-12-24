@@ -7,8 +7,9 @@ import { Award } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
 
-import { ProfileService } from "@/services/profile/profile.server";
+import { ProfileServerService } from "@/services/profile/profile.server";
 import ProfileCard from "../ProfileCard";
+import { getServerCachedProfile } from "@/services/profile/profile.cache";
 
 interface ProfilePageProps {
   params: Promise<{ username: string }>;
@@ -17,7 +18,7 @@ interface ProfilePageProps {
 export default async function ProfilePage({ params }: ProfilePageProps) {
   const username = (await params).username;
 
-  const userData = await ProfileService.getProfile();
+  const userData = await getServerCachedProfile();
   // Find user by username
   const user = mockUsers.find((u) => u.username === username) || mockUsers[0];
   const userPosts = mockPosts.filter((p) => p.author.id === user.id);
