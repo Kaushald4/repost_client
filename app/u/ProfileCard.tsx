@@ -20,21 +20,25 @@ const ProfileCard = ({ initialData }: ProfileCardProps) => {
     initialData: initialData,
     queryFn: () => ProfileClientService.getProfile(),
   });
-
+  console.log(user);
   return (
     <div className="">
       <div className="h-55 relative w-full overflow-hidden to-primary/10">
         <Image
-          src={user?.banner.url || "/default-banner.jpg"}
+          src={
+            user.banner?.url ??
+            "https://res.cloudinary.com/dl5cujwyq/image/upload/v1766601618/public/1600w-4SpKW5MtQl4_jktatj.webp"
+          }
           alt="Banner"
           fill
-          className="w-full h-full object-cover"
+          objectFit="cover"
+          className="w-full h-full object-cover object-center"
         />
       </div>
       <div className="p-6">
         <div className="flex items-start gap-6 -mt-16 mb-4">
           <Avatar className="h-24 w-24 border-4 border-background">
-            <AvatarImage src={user?.avatar.url} />
+            <AvatarImage src={user.avatar?.url} />
             <AvatarFallback className="text-2xl">
               {user?.username.slice(0, 2).toUpperCase()}
             </AvatarFallback>
