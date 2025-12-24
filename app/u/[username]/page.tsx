@@ -25,8 +25,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
   const username = (await params).username;
 
   const userData = await ProfileService.getProfile();
-  console.log(userData);
-
+  console.log(userData.data, "data");
   // Find user by username
   const user = mockUsers.find((u) => u.username === username) || mockUsers[0];
   const userPosts = mockPosts.filter((p) => p.author.id === user.id);

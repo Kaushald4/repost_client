@@ -13,13 +13,14 @@ import { Badge } from "@/components/ui/badge";
 type ProfileCardProps = {
   initialData: TUserResponseWrapper["data"];
 };
-
 const ProfileCard = ({ initialData }: ProfileCardProps) => {
   const { data: user } = useQuery({
     queryKey: ["profile"],
     initialData: initialData,
     queryFn: () => ProfileClientService.getProfile(),
   });
+  console.log(user, "user");
+
   return (
     <div className="p-6">
       <div className="flex items-start gap-6 -mt-16 mb-4">

@@ -16,6 +16,6 @@ export class ProfileClientService {
       throw new Error("Unauthorized");
     }
     const json = await res.json();
-    return json.data?.data;
+    return json.data as TUserResponseWrapper["data"];
   }
 }
