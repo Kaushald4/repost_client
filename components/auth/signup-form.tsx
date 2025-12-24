@@ -13,9 +13,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useAuth } from "@/hooks/use-auth";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { registerAction } from "@/services/auth/auth.action";
+import { useMutation } from "@tanstack/react-query";
 
 const formSchema = z.object({
   username: z.string().min(3).max(20),
@@ -28,7 +29,6 @@ interface SignupFormProps {
 }
 
 export function SignupForm({ onSuccess }: SignupFormProps) {
-  const { register, isRegistering } = useAuth();
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -40,14 +40,20 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    try {
-      await register(values);
+  const { isPending, mutate } = useMutation({
+    mutationFn: (data: z.infer<typeof formSchema>) => registerAction(data),
+    onSuccess: () => {
       if (onSuccess) {
         onSuccess();
       } else {
         router.push("/login");
       }
+    },
+  });
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      mutate(values);
     } catch {
       // Error handled by hook
     }
@@ -95,8 +101,8 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full" disabled={isRegistering}>
-          {isRegistering && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+        <Button type="submit" className="w-full" disabled={isPending}>
+          {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           Sign Up
         </Button>
       </form>

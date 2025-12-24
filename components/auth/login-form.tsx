@@ -13,10 +13,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useAuth } from "@/hooks/use-auth";
-import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { loginAction } from "@/lib/actions/auth";
+import { loginAction } from "@/services/auth/auth.action";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -28,7 +26,6 @@ interface LoginFormProps {
 }
 
 export function LoginForm({ onSuccess }: LoginFormProps) {
-  // const { login, isLoggingIn } = useAuth();
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
