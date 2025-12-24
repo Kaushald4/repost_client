@@ -1,19 +1,12 @@
 import { PostCard } from "@/components/post-card";
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { mockUsers, mockPosts } from "@/data/mock-data";
-import { MessageSquare, Cake, Award, TrendingUp } from "lucide-react";
-import { formatDistanceToNow } from "date-fns";
+import { Award } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
 
-import UpdateProfileForm from "../UpdateProfileForm";
-import { cookies, headers } from "next/headers";
-import { serverFetch } from "@/lib/serverFetch";
-import { AUTH_ENDPOINT } from "@/endpoint";
 import { ProfileService } from "@/services/profile/profile.server";
 import ProfileCard from "../ProfileCard";
 
@@ -25,7 +18,6 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
   const username = (await params).username;
 
   const userData = await ProfileService.getProfile();
-  console.log(userData.data, "data");
   // Find user by username
   const user = mockUsers.find((u) => u.username === username) || mockUsers[0];
   const userPosts = mockPosts.filter((p) => p.author.id === user.id);
@@ -35,9 +27,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
       <div className="max-w-5xl mx-auto p-6">
         <Card className="p-12 text-center">
           <h2 className="text-2xl font-bold mb-4">Please Log In</h2>
-          <p className="text-muted-foreground">
-            You need to be logged in to view profiles.
-          </p>
+          <p className="text-muted-foreground">You need to be logged in to view profiles.</p>
         </Card>
       </div>
     );
@@ -46,10 +36,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
   return (
     <div className="max-w-5xl mx-auto p-6 space-y-6">
       {/* Profile Header */}
-      <Card className="overflow-hidden">
-        {/* Banner */}
-        <div className="h-32 bg-linear-to-r from-primary/20 to-primary/10" />
-
+      <Card className="overflow-hidden py-0">
         <ProfileCard initialData={userData.data} />
       </Card>
 
@@ -95,9 +82,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
                   </div>
                   <Separator />
                   <div>
-                    <p className="text-sm text-muted-foreground mb-1">
-                      Account Created
-                    </p>
+                    <p className="text-sm text-muted-foreground mb-1">Account Created</p>
                     <p className="text-sm">
                       {new Date(user.createdAt).toLocaleDateString("en-US", {
                         year: "numeric",
@@ -124,9 +109,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm text-muted-foreground">Karma</span>
-                  <span className="font-semibold">
-                    {user.karma.toLocaleString()}
-                  </span>
+                  <span className="font-semibold">{user.karma.toLocaleString()}</span>
                 </div>
               </div>
               <Separator />
@@ -146,27 +129,21 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm">Helper</span>
-                  <span className="text-sm font-semibold">
-                    {user.stats.helper}
-                  </span>
+                  <span className="text-sm font-semibold">{user.stats.helper}</span>
                 </div>
                 <Progress value={user.stats.helper} />
               </div>
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm">Debate</span>
-                  <span className="text-sm font-semibold">
-                    {user.stats.debate}
-                  </span>
+                  <span className="text-sm font-semibold">{user.stats.debate}</span>
                 </div>
                 <Progress value={user.stats.debate} />
               </div>
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm">Creative</span>
-                  <span className="text-sm font-semibold">
-                    {user.stats.creative}
-                  </span>
+                  <span className="text-sm font-semibold">{user.stats.creative}</span>
                 </div>
                 <Progress value={user.stats.creative} />
               </div>
