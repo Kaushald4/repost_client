@@ -1,5 +1,3 @@
-import axiosInstance from "@/lib/axios";
-
 export interface TUploadResponse {
   success: boolean;
   statusCode: number;
@@ -15,8 +13,10 @@ export interface TUploadData {
   message: string;
 }
 
-export const MediaService = {
-  upload: async (
+export class MediaService {
+  static baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+  static upload = async (
     file: File,
     folder: string = "communities"
   ): Promise<TUploadResponse> => {
@@ -24,15 +24,15 @@ export const MediaService = {
     formData.append("file", file);
     formData.append("folder", folder);
 
-    const response = await axiosInstance.post<TUploadResponse>(
-      "/media/upload",
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
-    return response.data;
-  },
-};
+    const response = await fetch("/media/upload", {
+      method: "POST",
+      body: formData,
+      credentials: "include",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    const data = await response.json();
+    return data;
+  };
+}

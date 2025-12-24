@@ -2,17 +2,25 @@
 
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState, Suspense } from "react";
-import { AppLayout } from "@/components/app-layout";
 import { PostCard } from "@/components/post-card";
 import { Card } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { PostService } from "@/services/post.service";
-import { CommunityService } from "@/services/community.service";
+import {@/components/ui/tabs
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/app/components/ui/tabs";
+import { PostService } from "@/services/post.service"@/components/ui/avatar
+import { CommunityServic@/components/ui/buttonnity.service";
 import { Post, Community } from "@/types";
 import { Loader2, Search as SearchIcon, Users } from "lucide-react";
 import Link from "next/link";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/app/components/ui/avatar";
+import { Button } from "@/app/components/ui/button";
 
 function SearchContent() {
   const searchParams = useSearchParams();
@@ -122,16 +130,14 @@ function SearchContent() {
 
 export default function SearchPage() {
   return (
-    <AppLayout>
-      <Suspense
-        fallback={
-          <div className="flex justify-center items-center min-h-[60vh]">
-            <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          </div>
-        }
-      >
-        <SearchContent />
-      </Suspense>
-    </AppLayout>
+    <Suspense
+      fallback={
+        <div className="flex justify-center items-center min-h-[60vh]">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      }
+    >
+      <SearchContent />
+    </Suspense>
   );
 }

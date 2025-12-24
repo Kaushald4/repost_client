@@ -2,7 +2,6 @@
 "use client";
 
 import { use, useEffect, useState, useCallback } from "react";
-import { AppLayout } from "@/components/app-layout";
 import { PostCard } from "@/components/post-card";
 import { CommentItem } from "@/components/comment-item";
 import { Card } from "@/components/ui/card";
@@ -75,80 +74,76 @@ export default function PostPage({ params }: PostPageProps) {
 
   if (isLoading || !currentPost) {
     return (
-      <AppLayout>
-        <div className="flex justify-center items-center min-h-[60vh]">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        </div>
-      </AppLayout>
+      <div className="flex justify-center items-center min-h-[60vh]">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
     );
   }
 
   return (
-    <AppLayout>
-      <div className="max-w-4xl mx-auto p-6 space-y-6">
-        {/* Post */}
-        <PostCard post={currentPost} />
+    <div className="max-w-4xl mx-auto p-6 space-y-6">
+      {/* Post */}
+      <PostCard post={currentPost} />
 
-        {/* Comments Section */}
-        <Card className="p-6">
-          <div className="flex items-center gap-2 mb-6">
-            <MessageSquare className="h-5 w-5" />
-            <h2 className="text-xl font-semibold">
-              {currentPost.commentCount} Comments
-            </h2>
+      {/* Comments Section */}
+      <Card className="p-6">
+        <div className="flex items-center gap-2 mb-6">
+          <MessageSquare className="h-5 w-5" />
+          <h2 className="text-xl font-semibold">
+            {currentPost.commentCount} Comments
+          </h2>
+        </div>
+
+        <Separator className="mb-6" />
+
+        {/* New Comment Form */}
+        <div className="space-y-3 mb-8">
+          <Textarea
+            placeholder="What are your thoughts?"
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            className="min-h-24"
+          />
+          <div className="flex justify-end">
+            <Button
+              onClick={handleCommentSubmit}
+              disabled={isSubmitting || !newComment.trim()}
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Posting...
+                </>
+              ) : (
+                "Comment"
+              )}
+            </Button>
           </div>
+        </div>
 
-          <Separator className="mb-6" />
+        <Separator className="mb-6" />
 
-          {/* New Comment Form */}
-          <div className="space-y-3 mb-8">
-            <Textarea
-              placeholder="What are your thoughts?"
-              value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
-              className="min-h-24"
-            />
-            <div className="flex justify-end">
-              <Button
-                onClick={handleCommentSubmit}
-                disabled={isSubmitting || !newComment.trim()}
-              >
-                {isSubmitting ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Posting...
-                  </>
-                ) : (
-                  "Comment"
-                )}
-              </Button>
+        {/* Comments List */}
+        <div className="space-y-6">
+          {comments.length > 0 ? (
+            comments.map((comment) => (
+              <CommentItem
+                key={comment.id}
+                comment={comment}
+                onVote={handleVoteComment}
+                onReply={handleReply}
+              />
+            ))
+          ) : (
+            <div className="text-center py-12">
+              <MessageSquare className="h-12 w-12 mx-auto mb-3 text-muted-foreground" />
+              <p className="text-muted-foreground">
+                No comments yet. Be the first to comment!
+              </p>
             </div>
-          </div>
-
-          <Separator className="mb-6" />
-
-          {/* Comments List */}
-          <div className="space-y-6">
-            {comments.length > 0 ? (
-              comments.map((comment) => (
-                <CommentItem
-                  key={comment.id}
-                  comment={comment}
-                  onVote={handleVoteComment}
-                  onReply={handleReply}
-                />
-              ))
-            ) : (
-              <div className="text-center py-12">
-                <MessageSquare className="h-12 w-12 mx-auto mb-3 text-muted-foreground" />
-                <p className="text-muted-foreground">
-                  No comments yet. Be the first to comment!
-                </p>
-              </div>
-            )}
-          </div>
-        </Card>
-      </div>
-    </AppLayout>
+          )}
+        </div>
+      </Card>
+    </div>
   );
 }

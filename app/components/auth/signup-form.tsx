@@ -16,24 +16,25 @@ import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/use-auth";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { loginAction } from "@/lib/actions/auth";
 
 const formSchema = z.object({
+  username: z.string().min(3).max(20),
   email: z.string().email(),
   password: z.string().min(6),
 });
 
-interface LoginFormProps {
+interface SignupFormProps {
   onSuccess?: () => void;
 }
 
-export function LoginForm({ onSuccess }: LoginFormProps) {
-  // const { login, isLoggingIn } = useAuth();
+export function SignupForm({ onSuccess }: SignupFormProps) {
+  const { register, isRegistering } = useAuth();
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      username: "",
       email: "",
       password: "",
     },
@@ -41,11 +42,11 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      await loginAction(values);
+      await register(values);
       if (onSuccess) {
         onSuccess();
       } else {
-        router.push("/");
+        router.push("/login");
       }
     } catch {
       // Error handled by hook
@@ -55,6 +56,19 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <FormField
+          control={form.control}
+          name="username"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Username</FormLabel>
+              <FormControl>
+                <Input placeholder="username" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="email"
@@ -81,9 +95,9 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full">
-          {/* {isLoggingIn && <Loader2 className="mr-2 h-4 w-4 animate-spin" />} */}
-          Log In
+        <Button type="submit" className="w-full" disabled={isRegistering}>
+          {isRegistering && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          Sign Up
         </Button>
       </form>
     </Form>

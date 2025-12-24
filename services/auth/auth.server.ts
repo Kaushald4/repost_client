@@ -1,6 +1,5 @@
-import axiosInstance from "@/lib/axios";
 import { AUTH_ENDPOINT } from "@/endpoint";
-import { cookieHelper } from "@/lib/cookieHelper";
+
 import {
   TLoginRequest,
   TLoginResponse,
@@ -10,10 +9,11 @@ import {
   TUserResponse,
   TUserResponseWrapper,
 } from "@/types/register";
+import serverAxios from "@/lib/axios/server";
 
 class AuthService {
   async register(data: TSignupRequest): Promise<TSignupResponse> {
-    const response = await axiosInstance.post<TSignupResponse>(
+    const response = await serverAxios.post<TSignupResponse>(
       AUTH_ENDPOINT.REGISTER,
       data
     );
@@ -21,7 +21,7 @@ class AuthService {
   }
 
   async login(data: TLoginRequest): Promise<TLoginResponse> {
-    const response = await axiosInstance.post<TLoginResponse>(
+    const response = await serverAxios.post<TLoginResponse>(
       AUTH_ENDPOINT.LOGIN,
       data
     );
@@ -29,17 +29,13 @@ class AuthService {
   }
 
   async verify(): Promise<TUserResponse | null> {
-    const token = cookieHelper.get("access_token");
-    if (!token) {
-      return null;
-    }
     try {
-      const response = await axiosInstance.get<TUserResponseWrapper>(
+      const response = await serverAxios.get<TUserResponseWrapper>(
         AUTH_ENDPOINT.USER_INFO
       );
       return response.data.data;
     } catch (error) {
-      return null;
+      throw error;
     }
   }
 
@@ -47,7 +43,7 @@ class AuthService {
     refreshToken: string;
     refreshTokenId: string;
   }): Promise<TRefreshResponse> {
-    const response = await axiosInstance.post(AUTH_ENDPOINT.REFRESH, data);
+    const response = await serverAxios.post(AUTH_ENDPOINT.REFRESH, data);
     return response.data;
   }
 }

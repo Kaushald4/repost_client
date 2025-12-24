@@ -3,6 +3,10 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/providers/theme-provider";
 import QueryProvider from "@/providers/query-provider";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { AppHeader } from "@/app/_components/header/app-header";
+import { Sidebar } from "@/components/sidebar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,7 +24,7 @@ export const metadata: Metadata = {
     "A modern, Reddit-inspired social platform for meaningful discussions",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -37,7 +41,18 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            {children}
+            <AppHeader />
+            <div className="container mx-auto">
+              <div className="flex">
+                {/* Desktop Sidebar */}
+                <aside className="hidden lg:block w-72 sticky top-16 h-[calc(100vh-4rem)]">
+                  <Sidebar />
+                </aside>
+
+                {/* Main Content */}
+                <main className="flex-1 min-w-0">{children}</main>
+              </div>
+            </div>
           </ThemeProvider>
         </QueryProvider>
       </body>

@@ -4,7 +4,12 @@ class CookieHelper {
   private cookies: Cookies;
 
   constructor() {
-    this.cookies = new Cookies(null, { path: "/" });
+    this.cookies = new Cookies(null, {
+      path: "/",
+      maxAge: 60,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+    });
   }
 
   set(name: string, value: unknown, options?: CookieSetOptions) {
@@ -25,6 +30,10 @@ class CookieHelper {
 
   getUserData<T>() {
     return this.get<T>("user_data");
+  }
+
+  isLoggedIn(): boolean {
+    return !!this.get<string>("access_token");
   }
 }
 

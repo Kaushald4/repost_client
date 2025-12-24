@@ -16,7 +16,6 @@ import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/use-auth";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { loginAction } from "@/lib/actions/auth";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -28,7 +27,7 @@ interface LoginFormProps {
 }
 
 export function LoginForm({ onSuccess }: LoginFormProps) {
-  // const { login, isLoggingIn } = useAuth();
+  const { login, isLoggingIn } = useAuth();
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -41,7 +40,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      await loginAction(values);
+      await login(values);
       if (onSuccess) {
         onSuccess();
       } else {
@@ -81,8 +80,8 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full">
-          {/* {isLoggingIn && <Loader2 className="mr-2 h-4 w-4 animate-spin" />} */}
+        <Button type="submit" className="w-full" disabled={isLoggingIn}>
+          {isLoggingIn && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           Log In
         </Button>
       </form>

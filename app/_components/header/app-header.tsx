@@ -1,9 +1,11 @@
 import Link from "next/link";
-import { HeaderSearch } from "./header/header-search";
-import { HeaderActions } from "./header/header-actions";
-import { MobileMenu } from "./header/mobile-menu";
+import { HeaderSearch } from "./header-search";
+import { HeaderActions } from "./header-actions";
+import { MobileMenu } from "./mobile-menu";
+// import { ProfileService } from "@/services/profile.service";
 
-export function AppHeader() {
+export async function AppHeader() {
+  // const profile = await ProfileService.getProfile();
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
       <div className="container flex h-16 items-center justify-between px-4">

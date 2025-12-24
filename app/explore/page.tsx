@@ -2,7 +2,6 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
-import { AppLayout } from "@/components/app-layout";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,7 +11,12 @@ import { useCommunityStore } from "@/stores/community.store";
 import { Community } from "@/types";
 import { Search, Users, TrendingUp, Loader2 } from "lucide-react";
 import Link from "next/link";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {@/components/ui/tabs
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/app/components/ui/tabs";
 
 export default function ExplorePage() {
   const {
@@ -90,86 +94,84 @@ export default function ExplorePage() {
   );
 
   return (
-    <AppLayout>
-      <div className="max-w-6xl mx-auto p-6 space-y-6">
-        {/* Header */}
-        <div>
-          <h1 className="text-3xl font-bold mb-2">Explore Communities</h1>
-          <p className="text-muted-foreground">
-            Discover and join communities that interest you
-          </p>
-        </div>
-
-        {/* Search */}
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            placeholder="Search communities..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 h-12"
-          />
-        </div>
-
-        {/* Tabs */}
-        <Tabs defaultValue="all" className="space-y-4">
-          <TabsList>
-            <TabsTrigger value="all">
-              <TrendingUp className="mr-2 h-4 w-4" />
-              All Communities
-            </TabsTrigger>
-            <TabsTrigger value="joined">
-              <Users className="mr-2 h-4 w-4" />
-              Joined ({joinedCommunities.length})
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="all" className="space-y-4">
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="h-8 w-8 animate-spin text-primary" />
-              </div>
-            ) : filteredCommunities.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {filteredCommunities.map((community) => (
-                  <CommunityCard key={community.id} community={community} />
-                ))}
-              </div>
-            ) : (
-              <Card className="p-12 text-center">
-                <p className="text-muted-foreground">
-                  No communities found matching your search
-                </p>
-              </Card>
-            )}
-          </TabsContent>
-
-          <TabsContent value="joined" className="space-y-4">
-            {joinedCommunities.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {joinedCommunities.map((community) => (
-                  <CommunityCard key={community.id} community={community} />
-                ))}
-              </div>
-            ) : (
-              <Card className="p-12 text-center">
-                <p className="text-muted-foreground mb-4">
-                  You haven&apos;t joined any communities yet
-                </p>
-                <Button
-                  onClick={() =>
-                    document
-                      .querySelector<HTMLButtonElement>('[value="all"]')
-                      ?.click()
-                  }
-                >
-                  Explore Communities
-                </Button>
-              </Card>
-            )}
-          </TabsContent>
-        </Tabs>
+    <div className="max-w-6xl mx-auto p-6 space-y-6">
+      {/* Header */}
+      <div>
+        <h1 className="text-3xl font-bold mb-2">Explore Communities</h1>
+        <p className="text-muted-foreground">
+          Discover and join communities that interest you
+        </p>
       </div>
-    </AppLayout>
+
+      {/* Search */}
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
+        <Input
+          placeholder="Search communities..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="pl-10 h-12"
+        />
+      </div>
+
+      {/* Tabs */}
+      <Tabs defaultValue="all" className="space-y-4">
+        <TabsList>
+          <TabsTrigger value="all">
+            <TrendingUp className="mr-2 h-4 w-4" />
+            All Communities
+          </TabsTrigger>
+          <TabsTrigger value="joined">
+            <Users className="mr-2 h-4 w-4" />
+            Joined ({joinedCommunities.length})
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="all" className="space-y-4">
+          {isLoading ? (
+            <div className="flex justify-center py-12">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            </div>
+          ) : filteredCommunities.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {filteredCommunities.map((community) => (
+                <CommunityCard key={community.id} community={community} />
+              ))}
+            </div>
+          ) : (
+            <Card className="p-12 text-center">
+              <p className="text-muted-foreground">
+                No communities found matching your search
+              </p>
+            </Card>
+          )}
+        </TabsContent>
+
+        <TabsContent value="joined" className="space-y-4">
+          {joinedCommunities.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {joinedCommunities.map((community) => (
+                <CommunityCard key={community.id} community={community} />
+              ))}
+            </div>
+          ) : (
+            <Card className="p-12 text-center">
+              <p className="text-muted-foreground mb-4">
+                You haven&apos;t joined any communities yet
+              </p>
+              <Button
+                onClick={() =>
+                  document
+                    .querySelector<HTMLButtonElement>('[value="all"]')
+                    ?.click()
+                }
+              >
+                Explore Communities
+              </Button>
+            </Card>
+          )}
+        </TabsContent>
+      </Tabs>
+    </div>
   );
 }

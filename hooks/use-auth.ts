@@ -4,7 +4,7 @@ import {
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
-import { authService } from "@/services/auth.service";
+import { authService } from "@/services/auth/auth.server";
 import { cookieHelper } from "@/lib/cookieHelper";
 import { TLoginRequest, TSignupRequest } from "@/types/register";
 import { toast } from "sonner";

@@ -1,5 +1,4 @@
-// Main App Layout Component
-import { AppHeader } from "./app-header";
+import { AppHeader } from "../app/_components/header/app-header";
 import { Sidebar } from "./sidebar";
 
 export function AppLayout({ children }: { children: React.ReactNode }) {

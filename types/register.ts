@@ -1,3 +1,5 @@
+import { TUser } from "./profileTypes";
+
 export type TSignupResponse = {
   success: boolean;
   statusCode: number;
@@ -58,16 +60,6 @@ export interface TUserResponseWrapper {
   success: boolean;
   statusCode: number;
   message: string;
-  data: TUserResponse;
+  data: TUser;
   timestamp: string;
-}
-
-export interface TUserResponse {
-  id: string;
-  username: string;
-  displayName: string;
-  avatar: string;
-  bio: string;
-  email: string;
-}
 }

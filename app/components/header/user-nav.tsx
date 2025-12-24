@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,26 +9,37 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useAuth } from "@/hooks/use-auth";
 import { LoginModal } from "@/components/auth/login-modal";
 import { SignupModal } from "@/components/auth/signup-modal";
+import { ProfileService } from "@/services/profile/profile.server";
 
-export function UserNav() {
-  const { useUserSuspense, logout } = useAuth();
-  const { data: currentUser } = useUserSuspense();
+export default async function UserNav() {
+  // const { data: currentUser } = useUserSuspense();
+  // const currentUser = await ProfileService.getProfile();
 
-  if (!currentUser) {
-    return (
-      <div className="flex items-center gap-2">
-        <LoginModal />
-        <SignupModal />
-      </div>
-    );
-  }
+  // const userData = await fetch(`${process.env.API_BASE_URL}/user/user-info`, {
+  //   cache: "no-store",
+  //   credentials: "include",
+  //   headers: {
+  //     "content-type": "application/json",
+  //   },
+  // }).then((res) => res.json());
+
+  // const currentUser = userData?.data;
+  // console.log(currentUser);
+
+  // if (!currentUser) {
+  //   return (
+  //     <div className="flex items-center gap-2">
+  //       <LoginModal />
+  //       <SignupModal />
+  //     </div>
+  //   );
+  // }
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+      {/* <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon" className="rounded-full">
           <Avatar className="h-8 w-8">
             <AvatarImage src={currentUser.avatar} />
@@ -61,7 +70,7 @@ export function UserNav() {
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => logout()}>Log out</DropdownMenuItem>
-      </DropdownMenuContent>
+      </DropdownMenuContent> */}
     </DropdownMenu>
   );
 }
