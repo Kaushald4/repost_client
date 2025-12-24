@@ -19,7 +19,6 @@ const ProfileCard = ({ initialData }: ProfileCardProps) => {
     initialData: initialData,
     queryFn: () => ProfileClientService.getProfile(),
   });
-  console.log(user, "user");
 
   return (
     <div className="p-6">
@@ -36,9 +35,7 @@ const ProfileCard = ({ initialData }: ProfileCardProps) => {
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <h1 className="text-2xl font-bold">{user?.displayName}</h1>
-                {user.isVerified && (
-                  <Badge variant="secondary">✓ Verified</Badge>
-                )}
+                {user.isVerified && <Badge variant="secondary">✓ Verified</Badge>}
               </div>
               <p className="text-muted-foreground">u/{user.username}</p>
             </div>
@@ -52,9 +49,7 @@ const ProfileCard = ({ initialData }: ProfileCardProps) => {
             </div>
           </div>
 
-          {user.bio && (
-            <p className="text-sm text-muted-foreground mt-3">{user.bio}</p>
-          )}
+          {user.bio && <p className="text-sm text-muted-foreground mt-3">{user.bio}</p>}
 
           <div className="flex items-center gap-4 mt-4 text-sm text-muted-foreground">
             <div className="flex items-center gap-1">
@@ -68,9 +63,7 @@ const ProfileCard = ({ initialData }: ProfileCardProps) => {
             </div>
             <div className="flex items-center gap-1">
               <TrendingUp className="h-4 w-4" />
-              <span className="font-semibold text-foreground">
-                {user.karma.toLocaleString()}
-              </span>
+              <span className="font-semibold text-foreground">{user.karma.toLocaleString()}</span>
               <span>karma</span>
             </div>
           </div>
