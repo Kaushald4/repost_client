@@ -1,6 +1,6 @@
 "use client";
-import { logoutAction } from "@/services/auth/auth.action";
-import { DropdownMenuItem } from "../ui/dropdown-menu";
+import { logoutAction } from "@/features/auth/services/auth.action";
+import { DropdownMenuItem } from "../../../components/ui/dropdown-menu";
 
 const LogoutButton = () => {
   return (

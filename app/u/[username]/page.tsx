@@ -7,8 +7,8 @@ import { Award } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
 
-import ProfileCard from "../ProfileCard";
-import { getServerCachedProfile } from "@/services/profile/profile.cache";
+import ProfileCard from "../../../features/profile/components/ProfileCard";
+import { getServerCachedProfile } from "@/features/profile/services/profile.cache";
 
 interface ProfilePageProps {
   params: Promise<{ username: string }>;

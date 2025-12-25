@@ -15,7 +15,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Loader2, Upload, X, XIcon } from "lucide-react";
-import { ProfileFormData, UpdateProfileDialogProps } from "@/types/profileTypes";
+import { ProfileFormData, UpdateProfileDialogProps } from "@/features/profile/types";
 import Image from "next/image";
 
 export function UpdateProfileDialog({
