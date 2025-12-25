@@ -16,6 +16,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Loader2, Upload, X, XIcon } from "lucide-react";
 import { ProfileFormData, UpdateProfileDialogProps } from "@/types/profileTypes";
+import Image from "next/image";
 
 export function UpdateProfileDialog({
   username,
@@ -169,10 +170,11 @@ export function UpdateProfileDialog({
                 <Label>Banner</Label>
                 <div className="mt-2">
                   {bannerPreview && (
-                    <div className="relative mb-4">
-                      <img
+                    <div className="relative mb-4 h-40">
+                      <Image
                         src={bannerPreview}
                         alt="Banner preview"
+                        fill
                         className="w-full h-32 object-cover rounded-md"
                       />
                       <Button
