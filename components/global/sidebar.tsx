@@ -1,23 +1,15 @@
-// Sidebar Navigation Component
 "use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  Home,
-  Compass,
-  TrendingUp,
-  MessageSquare,
-  Settings,
-  Plus,
-} from "lucide-react";
+import { Home, Compass, TrendingUp, MessageSquare, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { useCommunityStore } from "@/stores/community.store";
 import { useEffect } from "react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { CreateCommunityModal } from "@/components/create-community-modal";
+import { CreateCommunityModal } from "@/features/community/components/create-community-modal";
 
 const mainNav = [
   { href: "/", label: "Home", icon: Home },
@@ -64,9 +56,7 @@ export function Sidebar() {
 
         <div className="pb-4">
           <div className="flex items-center justify-between px-3 mb-2">
-            <h3 className="text-sm font-semibold text-muted-foreground">
-              Your Communities
-            </h3>
+            <h3 className="text-sm font-semibold text-muted-foreground">Your Communities</h3>
             <CreateCommunityModal />
           </div>
 
@@ -74,9 +64,7 @@ export function Sidebar() {
             {joinedCommunities.map((community) => (
               <Link key={community.id} href={`/r/${community.name}`}>
                 <Button
-                  variant={
-                    pathname === `/r/${community.name}` ? "secondary" : "ghost"
-                  }
+                  variant={pathname === `/r/${community.name}` ? "secondary" : "ghost"}
                   className="w-full justify-start gap-3"
                 >
                   <Avatar className="h-5 w-5">
@@ -92,9 +80,7 @@ export function Sidebar() {
 
           {joinedCommunities.length === 0 && (
             <div className="px-3 py-6 text-center">
-              <p className="text-sm text-muted-foreground mb-2">
-                No communities yet
-              </p>
+              <p className="text-sm text-muted-foreground mb-2">No communities yet</p>
               <Link href="/explore">
                 <Button variant="outline" size="sm">
                   Explore Communities

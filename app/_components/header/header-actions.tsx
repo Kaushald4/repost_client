@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 // import { useNotificationStore } from "@/stores/notification.store";
 import { Suspense } from "react";
-import { ThemeToggle } from "@/components/theme-toggle";
+import { ThemeToggle } from "@/components/global/theme-toggle";
 import { CreatePostModal } from "@/components/create-post-modal";
 import UserNav from "./user-nav";
 import { Skeleton } from "@/components/ui/skeleton";

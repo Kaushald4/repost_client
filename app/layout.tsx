@@ -4,7 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/providers/theme-provider";
 import QueryProvider from "@/providers/query-provider";
 import { AppHeader } from "@/app/_components/header/app-header";
-import { Sidebar } from "@/components/sidebar";
+import { Sidebar } from "@/components/global/sidebar";
 import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({

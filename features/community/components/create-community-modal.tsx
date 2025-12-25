@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -34,43 +33,12 @@ import {
 } from "@/components/ui/select";
 import { toast } from "sonner";
 import { Loader2, Plus } from "lucide-react";
-import { uploadMediaAction } from "@/features/mediaUploads/services/media.action";
-// import { MediaService } from "@/services/media/media.action";
-
-const communityFormSchema = z.object({
-  name: z
-    .string()
-    .min(3, "Name must be at least 3 characters")
-    .max(21, "Name must be at most 21 characters")
-    .regex(/^[a-zA-Z0-9_]+$/, "Name can only contain letters, numbers, and underscores"),
-  title: z
-    .string()
-    .min(3, "Title must be at least 3 characters")
-    .max(100, "Title must be at most 100 characters"),
-  description: z.string().max(500, "Description must be at most 500 characters").optional(),
-  visibility: z.enum(["PUBLIC", "RESTRICTED", "PRIVATE"]),
-  icon: z
-    .object({
-      fileId: z.string().optional(),
-      url: z.string().optional(),
-      previewUrl: z.string().optional(),
-    })
-    .optional(),
-  banner: z
-    .object({
-      fileId: z.string().optional(),
-      url: z.string().optional(),
-      previewUrl: z.string().optional(),
-    })
-    .optional(),
-});
-
-type CommunityFormValues = z.infer<typeof communityFormSchema>;
+import { communityFormSchema, CommunityFormValues } from "../schema";
+import { useMutation } from "@tanstack/react-query";
+import { createCommunityAction } from "../services/community.action";
+import useUploadMutation from "@/hooks/useUploadMutation";
 
 export function CreateCommunityModal() {
-  const router = useRouter();
-
-  const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [iconFile, setIconFile] = useState<File | null>(null);
   const [bannerFile, setBannerFile] = useState<File | null>(null);
@@ -95,54 +63,58 @@ export function CreateCommunityModal() {
     },
   });
 
-  async function onSubmit(values: CommunityFormValues) {
-    try {
-      const dataToCreate: Partial<CommunityFormValues> = {};
+  const { isUploading, uploadMediaAsync } = useUploadMutation();
 
-      // Handle File Uploads
-      if (iconFile) {
-        const res = await uploadMediaAction(iconFile, "repost_communities/icons");
-        if (res) {
-          dataToCreate["icon"] = {
-            fileId: res.data.publicId,
-            url: res.data.url,
-          };
-        }
+  const { mutate: createCommunity, isPending: isCreating } = useMutation({
+    mutationFn: async (data: CommunityFormValues) => createCommunityAction(data),
+    onSuccess: (data) => {
+      toast.success(`r/ created successfully`);
+      // setIconFile(null);
+      // setBannerFile(null);
+      // setIsOpen(false);
+      // form.reset();
+    },
+    onError: (error) => {
+      console.log(error, error instanceof Error, "ERROR");
+      if (error instanceof Error && error.message) {
+        toast.error(error.message);
+        return;
       }
-      if (bannerFile) {
-        const res = await uploadMediaAction(bannerFile, "repost_communities/banners");
-        if (res) {
-          dataToCreate["banner"] = {
-            fileId: res.data.publicId,
-            url: res.data.url,
-          };
-        }
-      }
-
-      // Create Community
-      // await createCommunity({
-      //   name: values.name,
-      //   title: values.title,
-      //   description: values.description || "",
-      //   displayName: values.title,
-      //   icon: iconUrl,
-      //   banner: bannerUrl,
-      //   visibility: values.visibility
-      // });
-
-      toast.success(`r/${values.name} created successfully`);
-      setIsOpen(false);
-      form.reset();
-      setIconFile(null);
-      setBannerFile(null);
-      router.push(`/r/${values.name}`);
-    } catch (error) {
-      console.error(error);
       toast.error("Failed to create community");
-    } finally {
-      setIsLoading(false);
+    },
+  });
+
+  async function onSubmit(values: CommunityFormValues) {
+    const { banner, icon, ...otherValues } = values;
+    const dataToCreate: Partial<CommunityFormValues> = { ...otherValues };
+
+    // Handle File Uploads
+    if (iconFile) {
+      const res = await uploadMediaAsync({ file: iconFile, folder: "repost_communities/icons" });
+      if (res) {
+        dataToCreate["icon"] = {
+          fileId: res.data.publicId,
+          url: res.data.url,
+        };
+      }
     }
+    if (bannerFile) {
+      const res = await uploadMediaAsync({
+        file: bannerFile,
+        folder: "repost_communities/banners",
+      });
+      if (res) {
+        dataToCreate["banner"] = {
+          fileId: res.data.publicId,
+          url: res.data.url,
+        };
+      }
+    }
+
+    createCommunity(dataToCreate as CommunityFormValues);
   }
+
+  const isPending = isCreating || isUploading;
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -279,12 +251,12 @@ export function CreateCommunityModal() {
                 type="button"
                 variant="outline"
                 onClick={() => setIsOpen(false)}
-                disabled={isLoading}
+                disabled={isPending}
               >
                 Cancel
               </Button>
-              <Button type="submit" disabled={isLoading}>
-                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              <Button type="submit" disabled={isPending}>
+                {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Create Community
               </Button>
             </div>
