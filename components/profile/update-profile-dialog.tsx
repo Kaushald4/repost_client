@@ -14,7 +14,7 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Loader2, Upload, X } from "lucide-react";
+import { Loader2, Upload, X, XIcon } from "lucide-react";
 import { ProfileFormData, UpdateProfileDialogProps } from "@/types/profileTypes";
 
 export function UpdateProfileDialog({
@@ -28,6 +28,9 @@ export function UpdateProfileDialog({
   allowDMs,
   isPending,
   onSave,
+  onClose,
+  onOpen,
+  open,
 }: UpdateProfileDialogProps) {
   const [formData, setFormData] = useState<ProfileFormData>({
     username,
@@ -87,13 +90,16 @@ export function UpdateProfileDialog({
   };
 
   return (
-    <Dialog>
+    <Dialog open={open}>
       <DialogTrigger asChild>
-        <Button variant="outline">Update Profile</Button>
+        <Button onClick={onOpen} variant="outline">
+          Update Profile
+        </Button>
       </DialogTrigger>
-      <DialogContent className="min-w-2xl max-h-[80vh] overflow-y-auto">
-        <DialogHeader>
+      <DialogContent showCloseButton={false} className="min-w-2xl max-h-[80vh] overflow-y-auto">
+        <DialogHeader className="flex flex-row items-center justify-between">
           <DialogTitle>Update Profile</DialogTitle>
+          <XIcon onClick={onClose} />
         </DialogHeader>
         <div className="space-y-6">
           <Card>
@@ -243,7 +249,9 @@ export function UpdateProfileDialog({
           </Card>
 
           <div className="flex justify-end space-x-2">
-            <Button variant="outline">Cancel</Button>
+            <Button variant="outline" onClick={onClose}>
+              Cancel
+            </Button>
             <Button disabled={isPending} onClick={handleSave}>
               {isPending && <Loader2 className="animate-spin" />}
               Save Changes

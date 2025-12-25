@@ -7,15 +7,18 @@ import { updateProfileAction } from "@/services/profile/profile.action";
 import { UpdateProfileFormProps } from "@/types/mediaTypes";
 import { ProfileFormData, ProfileFormDataWithoutFiles } from "@/types/profileTypes";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { useState } from "react";
+import { toast } from "react-hot-toast";
 
 const UpdateProfileForm = ({ user }: UpdateProfileFormProps) => {
+  const [open, setOpen] = useState(false);
   const queryClient = useQueryClient();
 
   const { mutate: updateProfile, isPending: isProfileUpdating } = useMutation({
     mutationFn: async (data: ProfileFormDataWithoutFiles) => updateProfileAction(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["profile"] });
+      setOpen(false);
       toast.success("Profile updated successfully!");
     },
     onError: () => {
@@ -78,6 +81,13 @@ const UpdateProfileForm = ({ user }: UpdateProfileFormProps) => {
       allowDMs={true} // TODO: fetch from user settings
       onSave={(data) => handleSave(data)}
       isPending={isPending}
+      onOpen={() => {
+        setOpen(true);
+      }}
+      onClose={() => {
+        setOpen(false);
+      }}
+      open={open}
     />
   );
 };

@@ -40,6 +40,9 @@ export interface UpdateProfileDialogProps {
   darkMode: boolean;
   allowDMs: boolean;
   onSave: (data: ProfileFormData) => void;
+  onOpen: () => void;
+  onClose: () => void;
+  open: boolean;
   isPending?: boolean;
 }
 
