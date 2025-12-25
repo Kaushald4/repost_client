@@ -7,7 +7,6 @@ import { Award } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
 
-import { ProfileServerService } from "@/services/profile/profile.server";
 import ProfileCard from "../ProfileCard";
 import { getServerCachedProfile } from "@/services/profile/profile.cache";
 

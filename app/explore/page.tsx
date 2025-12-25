@@ -11,12 +11,7 @@ import { useCommunityStore } from "@/stores/community.store";
 import { Community } from "@/types";
 import { Search, Users, TrendingUp, Loader2 } from "lucide-react";
 import Link from "next/link";
-import {@/components/ui/tabs
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/app/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function ExplorePage() {
   const {
@@ -40,7 +35,7 @@ export default function ExplorePage() {
       (c) =>
         c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         c.displayName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        c.description.toLowerCase().includes(searchQuery.toLowerCase())
+        c.description.toLowerCase().includes(searchQuery.toLowerCase()),
     );
   }, [searchQuery, communities]);
 
@@ -63,9 +58,7 @@ export default function ExplorePage() {
           </Avatar>
           <div>
             <Link href={`/r/${community.name}`}>
-              <h3 className="font-semibold text-lg hover:text-primary">
-                r/{community.name}
-              </h3>
+              <h3 className="font-semibold text-lg hover:text-primary">r/{community.name}</h3>
             </Link>
             <p className="text-sm text-muted-foreground">
               {community.memberCount.toLocaleString()} members
@@ -81,9 +74,7 @@ export default function ExplorePage() {
         </Button>
       </div>
 
-      <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
-        {community.description}
-      </p>
+      <p className="text-sm text-muted-foreground mb-4 line-clamp-2">{community.description}</p>
 
       <div className="flex items-center gap-2">
         <Badge variant="secondary" className="text-xs">
@@ -98,9 +89,7 @@ export default function ExplorePage() {
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold mb-2">Explore Communities</h1>
-        <p className="text-muted-foreground">
-          Discover and join communities that interest you
-        </p>
+        <p className="text-muted-foreground">Discover and join communities that interest you</p>
       </div>
 
       {/* Search */}
@@ -140,9 +129,7 @@ export default function ExplorePage() {
             </div>
           ) : (
             <Card className="p-12 text-center">
-              <p className="text-muted-foreground">
-                No communities found matching your search
-              </p>
+              <p className="text-muted-foreground">No communities found matching your search</p>
             </Card>
           )}
         </TabsContent>
@@ -160,11 +147,7 @@ export default function ExplorePage() {
                 You haven&apos;t joined any communities yet
               </p>
               <Button
-                onClick={() =>
-                  document
-                    .querySelector<HTMLButtonElement>('[value="all"]')
-                    ?.click()
-                }
+                onClick={() => document.querySelector<HTMLButtonElement>('[value="all"]')?.click()}
               >
                 Explore Communities
               </Button>

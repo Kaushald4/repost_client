@@ -25,9 +25,16 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useCommunityStore } from "@/stores/community.store";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { toast } from "sonner";
-import { Loader2, Plus, Upload } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
+import { uploadMediaAction } from "@/services/media/media.action";
 // import { MediaService } from "@/services/media/media.action";
 
 const communityFormSchema = z.object({
@@ -41,74 +48,100 @@ const communityFormSchema = z.object({
     .min(3, "Title must be at least 3 characters")
     .max(100, "Title must be at most 100 characters"),
   description: z.string().max(500, "Description must be at most 500 characters").optional(),
-  icon: z.string().optional(),
-  banner: z.string().optional(),
+  visibility: z.enum(["PUBLIC", "RESTRICTED", "PRIVATE"]),
+  icon: z
+    .object({
+      fileId: z.string().optional(),
+      url: z.string().optional(),
+      previewUrl: z.string().optional(),
+    })
+    .optional(),
+  banner: z
+    .object({
+      fileId: z.string().optional(),
+      url: z.string().optional(),
+      previewUrl: z.string().optional(),
+    })
+    .optional(),
 });
+
+type CommunityFormValues = z.infer<typeof communityFormSchema>;
 
 export function CreateCommunityModal() {
   const router = useRouter();
-  const { createCommunity } = useCommunityStore();
+
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [iconFile, setIconFile] = useState<File | null>(null);
   const [bannerFile, setBannerFile] = useState<File | null>(null);
 
-  const form = useForm<z.infer<typeof communityFormSchema>>({
+  const form = useForm<CommunityFormValues>({
     resolver: zodResolver(communityFormSchema),
     defaultValues: {
       name: "",
       title: "",
       description: "",
-      icon: "",
-      banner: "",
+      visibility: "PUBLIC",
+      icon: {
+        fileId: "",
+        url: "",
+        previewUrl: "",
+      },
+      banner: {
+        fileId: "",
+        url: "",
+        previewUrl: "",
+      },
     },
   });
 
-  async function onSubmit(values: z.infer<typeof communityFormSchema>) {
-    setIsLoading(true);
-    // try {
-    //   let iconUrl = values.icon;
-    //   let bannerUrl = values.banner;
+  async function onSubmit(values: CommunityFormValues) {
+    try {
+      const dataToCreate: Partial<CommunityFormValues> = {};
 
-    //   if (iconFile) {
-    //     const res = await MediaService.upload(iconFile, "repost_communities/icons");
-    //     if (res.success) {
-    //       iconUrl = res.url;
-    //     } else {
-    //       toast.error("Failed to upload icon");
-    //       return;
-    //     }
-    //   }
+      // Handle File Uploads
+      if (iconFile) {
+        const res = await uploadMediaAction(iconFile, "repost_communities/icons");
+        if (res) {
+          dataToCreate["icon"] = {
+            fileId: res.data.publicId,
+            url: res.data.url,
+          };
+        }
+      }
+      if (bannerFile) {
+        const res = await uploadMediaAction(bannerFile, "repost_communities/banners");
+        if (res) {
+          dataToCreate["banner"] = {
+            fileId: res.data.publicId,
+            url: res.data.url,
+          };
+        }
+      }
 
-    //   if (bannerFile) {
-    //     const res = await MediaService.upload(bannerFile, "repost_communities/banners");
-    //     if (res.success) {
-    //       bannerUrl = res.url;
-    //     } else {
-    //       toast.error("Failed to upload banner");
-    //       return;
-    //     }
-    //   }
+      // Create Community
+      // await createCommunity({
+      //   name: values.name,
+      //   title: values.title,
+      //   description: values.description || "",
+      //   displayName: values.title,
+      //   icon: iconUrl,
+      //   banner: bannerUrl,
+      //   visibility: values.visibility
+      // });
 
-    //   await createCommunity({
-    //     name: values.name,
-    //     title: values.title,
-    //     description: values.description,
-    //     displayName: values.title,
-    //     icon: iconUrl,
-    //     banner: bannerUrl,
-    //   });
-    //   toast.success(`r/${values.name} created successfully`);
-    //   setIsOpen(false);
-    //   form.reset();
-    //   setIconFile(null);
-    //   setBannerFile(null);
-    //   router.push(`/r/${values.name}`);
-    // } catch {
-    //   toast.error("Failed to create community");
-    // } finally {
-    //   setIsLoading(false);
-    // }
+      toast.success(`r/${values.name} created successfully`);
+      setIsOpen(false);
+      form.reset();
+      setIconFile(null);
+      setBannerFile(null);
+      router.push(`/r/${values.name}`);
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to create community");
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -174,6 +207,31 @@ export function CreateCommunityModal() {
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="visibility"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Visibility</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select community visibility" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="PUBLIC">Public - Anyone can join</SelectItem>
+                      <SelectItem value="RESTRICTED">
+                        Restricted - Visible, join requires approval
+                      </SelectItem>
+                      <SelectItem value="PRIVATE">Private - Invite only</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>Control who can view and join your community</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             <div className="grid grid-cols-2 gap-4">
               <FormItem>
@@ -216,7 +274,6 @@ export function CreateCommunityModal() {
                 )}
               </FormItem>
             </div>
-
             <div className="flex justify-end gap-2 pt-4">
               <Button
                 type="button"

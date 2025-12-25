@@ -1,17 +1,12 @@
-// Messages Page
 "use client";
 
 import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {@/components/ui/avatar
-  Avatar,@/components/ui/scroll-area
-  AvatarFallback,@/components/ui/badge
-  AvatarImage,
-} from "@/app/components/ui/avatar";
-import { ScrollArea } from "@/app/components/ui/scroll-area";
-import { Badge } from "@/app/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Badge } from "@/components/ui/badge";
 import { MessageService } from "@/services/message.service";
 import { Conversation, Message } from "@/types";
 import { MessageSquare, Send, Search } from "lucide-react";
@@ -20,8 +15,7 @@ import { cn } from "@/lib/utils";
 
 export default function MessagesPage() {
   const [conversations, setConversations] = useState<Conversation[]>([]);
-  const [selectedConversation, setSelectedConversation] =
-    useState<Conversation | null>(null);
+  const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
@@ -67,8 +61,8 @@ export default function MessagesPage() {
     conv.participants.some(
       (p) =>
         p.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        p.displayName.toLowerCase().includes(searchQuery.toLowerCase())
-    )
+        p.displayName.toLowerCase().includes(searchQuery.toLowerCase()),
+    ),
   );
 
   const otherParticipant = selectedConversation?.participants[1];
@@ -97,11 +91,7 @@ export default function MessagesPage() {
               return (
                 <Button
                   key={conversation.id}
-                  variant={
-                    selectedConversation?.id === conversation.id
-                      ? "secondary"
-                      : "ghost"
-                  }
+                  variant={selectedConversation?.id === conversation.id ? "secondary" : "ghost"}
                   className="w-full justify-start h-auto p-3"
                   onClick={() => setSelectedConversation(conversation)}
                 >
@@ -119,10 +109,9 @@ export default function MessagesPage() {
                           {otherUser.displayName}
                         </span>
                         <span className="text-xs text-muted-foreground">
-                          {formatDistanceToNow(
-                            new Date(conversation.updatedAt),
-                            { addSuffix: true }
-                          )}
+                          {formatDistanceToNow(new Date(conversation.updatedAt), {
+                            addSuffix: true,
+                          })}
                         </span>
                       </div>
                       <div className="flex items-center gap-2">
@@ -130,9 +119,7 @@ export default function MessagesPage() {
                           {conversation.lastMessage.content}
                         </p>
                         {conversation.unreadCount > 0 && (
-                          <Badge className="h-5 px-1.5 text-xs">
-                            {conversation.unreadCount}
-                          </Badge>
+                          <Badge className="h-5 px-1.5 text-xs">{conversation.unreadCount}</Badge>
                         )}
                       </div>
                     </div>
@@ -157,12 +144,8 @@ export default function MessagesPage() {
                 </AvatarFallback>
               </Avatar>
               <div>
-                <h3 className="font-semibold">
-                  {otherParticipant.displayName}
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  u/{otherParticipant.username}
-                </p>
+                <h3 className="font-semibold">{otherParticipant.displayName}</h3>
+                <p className="text-sm text-muted-foreground">u/{otherParticipant.username}</p>
               </div>
             </div>
           </div>
@@ -174,10 +157,7 @@ export default function MessagesPage() {
                 messages.map((message) => {
                   const isOwn = message.sender.id === "1"; // Current user
                   return (
-                    <div
-                      key={message.id}
-                      className={cn("flex gap-3", isOwn && "flex-row-reverse")}
-                    >
+                    <div key={message.id} className={cn("flex gap-3", isOwn && "flex-row-reverse")}>
                       <Avatar className="h-8 w-8">
                         <AvatarImage src={message.sender.avatar} />
                         <AvatarFallback className="text-xs">
@@ -185,18 +165,11 @@ export default function MessagesPage() {
                         </AvatarFallback>
                       </Avatar>
 
-                      <div
-                        className={cn(
-                          "flex flex-col max-w-[70%]",
-                          isOwn && "items-end"
-                        )}
-                      >
+                      <div className={cn("flex flex-col max-w-[70%]", isOwn && "items-end")}>
                         <div
                           className={cn(
                             "rounded-lg p-3",
-                            isOwn
-                              ? "bg-primary text-primary-foreground"
-                              : "bg-muted"
+                            isOwn ? "bg-primary text-primary-foreground" : "bg-muted",
                           )}
                         >
                           <p className="text-sm">{message.content}</p>
@@ -213,9 +186,7 @@ export default function MessagesPage() {
               ) : (
                 <div className="text-center py-12">
                   <MessageSquare className="h-12 w-12 mx-auto mb-3 text-muted-foreground" />
-                  <p className="text-muted-foreground">
-                    No messages yet. Start the conversation!
-                  </p>
+                  <p className="text-muted-foreground">No messages yet. Start the conversation!</p>
                 </div>
               )}
             </div>
@@ -245,12 +216,8 @@ export default function MessagesPage() {
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center">
             <MessageSquare className="h-16 w-16 mx-auto mb-4 text-muted-foreground" />
-            <h3 className="text-xl font-semibold mb-2">
-              No conversation selected
-            </h3>
-            <p className="text-muted-foreground">
-              Select a conversation to start messaging
-            </p>
+            <h3 className="text-xl font-semibold mb-2">No conversation selected</h3>
+            <p className="text-muted-foreground">Select a conversation to start messaging</p>
           </div>
         </div>
       )}
