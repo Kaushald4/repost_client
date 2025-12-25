@@ -5,11 +5,11 @@ import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { formatDistanceToNow } from "date-fns";
 import { Cake, MessageSquare, TrendingUp } from "lucide-react";
-import UpdateProfileForm from "./UpdateProfileForm";
-import { ProfileClientService } from "@/services/profile/profile.client";
+import { ProfileClientService } from "@/features/profile/services/profile.client";
 import { TUserResponseWrapper } from "@/types/register";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
+import UpdateProfileForm from "./UpdateProfileForm";
 
 type ProfileCardProps = {
   initialData: TUserResponseWrapper["data"];

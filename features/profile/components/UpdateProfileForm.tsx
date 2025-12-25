@@ -1,11 +1,11 @@
 "use client";
 
-import { UpdateProfileDialog } from "@/components/profile/update-profile-dialog";
+import { UpdateProfileDialog } from "@/features/profile/components/update-profile-dialog";
 import { resolveMediaCommand } from "@/lib/mediaUtils";
-import { uploadMediaAction } from "@/services/media/media.action";
-import { updateProfileAction } from "@/services/profile/profile.action";
+import { uploadMediaAction } from "@/features/mediaUploads/services/media.action";
+import { updateProfileAction } from "@/features/profile/services/profile.action";
 import { UpdateProfileFormProps } from "@/types/mediaTypes";
-import { ProfileFormData, ProfileFormDataWithoutFiles } from "@/types/profileTypes";
+import { ProfileFormData, ProfileFormDataWithoutFiles } from "@/features/profile/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "react-hot-toast";

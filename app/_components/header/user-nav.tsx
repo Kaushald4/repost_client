@@ -9,10 +9,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { LoginModal } from "@/components/auth/login-modal";
-import { SignupModal } from "@/components/auth/signup-modal";
-import { getServerCachedProfile } from "@/services/profile/profile.cache";
-import LogoutButton from "@/components/auth/logout-button";
+import { LoginModal } from "@/features/auth/components/login-modal";
+import { SignupModal } from "@/features/auth/components/signup-modal";
+import { getServerCachedProfile } from "@/features/profile/services/profile.cache";
+import LogoutButton from "@/features/auth/components/logout-button";
 
 export default async function UserNav() {
   const userData = await getServerCachedProfile();

@@ -34,7 +34,7 @@ import {
 } from "@/components/ui/select";
 import { toast } from "sonner";
 import { Loader2, Plus } from "lucide-react";
-import { uploadMediaAction } from "@/services/media/media.action";
+import { uploadMediaAction } from "@/features/mediaUploads/services/media.action";
 // import { MediaService } from "@/services/media/media.action";
 
 const communityFormSchema = z.object({
