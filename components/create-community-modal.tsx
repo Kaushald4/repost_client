@@ -28,25 +28,19 @@ import { Textarea } from "@/components/ui/textarea";
 import { useCommunityStore } from "@/stores/community.store";
 import { toast } from "sonner";
 import { Loader2, Plus, Upload } from "lucide-react";
-import { MediaService } from "@/services/media/media.client";
+// import { MediaService } from "@/services/media/media.action";
 
 const communityFormSchema = z.object({
   name: z
     .string()
     .min(3, "Name must be at least 3 characters")
     .max(21, "Name must be at most 21 characters")
-    .regex(
-      /^[a-zA-Z0-9_]+$/,
-      "Name can only contain letters, numbers, and underscores"
-    ),
+    .regex(/^[a-zA-Z0-9_]+$/, "Name can only contain letters, numbers, and underscores"),
   title: z
     .string()
     .min(3, "Title must be at least 3 characters")
     .max(100, "Title must be at most 100 characters"),
-  description: z
-    .string()
-    .max(500, "Description must be at most 500 characters")
-    .optional(),
+  description: z.string().max(500, "Description must be at most 500 characters").optional(),
   icon: z.string().optional(),
   banner: z.string().optional(),
 });
@@ -72,55 +66,49 @@ export function CreateCommunityModal() {
 
   async function onSubmit(values: z.infer<typeof communityFormSchema>) {
     setIsLoading(true);
-    try {
-      let iconUrl = values.icon;
-      let bannerUrl = values.banner;
+    // try {
+    //   let iconUrl = values.icon;
+    //   let bannerUrl = values.banner;
 
-      if (iconFile) {
-        const res = await MediaService.upload(
-          iconFile,
-          "repost_communities/icons"
-        );
-        if (res.success) {
-          iconUrl = res.url;
-        } else {
-          toast.error("Failed to upload icon");
-          return;
-        }
-      }
+    //   if (iconFile) {
+    //     const res = await MediaService.upload(iconFile, "repost_communities/icons");
+    //     if (res.success) {
+    //       iconUrl = res.url;
+    //     } else {
+    //       toast.error("Failed to upload icon");
+    //       return;
+    //     }
+    //   }
 
-      if (bannerFile) {
-        const res = await MediaService.upload(
-          bannerFile,
-          "repost_communities/banners"
-        );
-        if (res.success) {
-          bannerUrl = res.url;
-        } else {
-          toast.error("Failed to upload banner");
-          return;
-        }
-      }
+    //   if (bannerFile) {
+    //     const res = await MediaService.upload(bannerFile, "repost_communities/banners");
+    //     if (res.success) {
+    //       bannerUrl = res.url;
+    //     } else {
+    //       toast.error("Failed to upload banner");
+    //       return;
+    //     }
+    //   }
 
-      await createCommunity({
-        name: values.name,
-        title: values.title,
-        description: values.description,
-        displayName: values.title,
-        icon: iconUrl,
-        banner: bannerUrl,
-      });
-      toast.success(`r/${values.name} created successfully`);
-      setIsOpen(false);
-      form.reset();
-      setIconFile(null);
-      setBannerFile(null);
-      router.push(`/r/${values.name}`);
-    } catch {
-      toast.error("Failed to create community");
-    } finally {
-      setIsLoading(false);
-    }
+    //   await createCommunity({
+    //     name: values.name,
+    //     title: values.title,
+    //     description: values.description,
+    //     displayName: values.title,
+    //     icon: iconUrl,
+    //     banner: bannerUrl,
+    //   });
+    //   toast.success(`r/${values.name} created successfully`);
+    //   setIsOpen(false);
+    //   form.reset();
+    //   setIconFile(null);
+    //   setBannerFile(null);
+    //   router.push(`/r/${values.name}`);
+    // } catch {
+    //   toast.error("Failed to create community");
+    // } finally {
+    //   setIsLoading(false);
+    // }
   }
 
   return (
@@ -133,9 +121,7 @@ export function CreateCommunityModal() {
       <DialogContent className="sm:max-w-[525px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Create a Community</DialogTitle>
-          <DialogDescription>
-            Build a new home for your interests.
-          </DialogDescription>
+          <DialogDescription>Build a new home for your interests.</DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -147,14 +133,8 @@ export function CreateCommunityModal() {
                   <FormLabel>Name</FormLabel>
                   <FormControl>
                     <div className="relative">
-                      <span className="absolute left-3 top-2.5 text-muted-foreground">
-                        r/
-                      </span>
-                      <Input
-                        className="pl-7"
-                        placeholder="community_name"
-                        {...field}
-                      />
+                      <span className="absolute left-3 top-2.5 text-muted-foreground">r/</span>
+                      <Input className="pl-7" placeholder="community_name" {...field} />
                     </div>
                   </FormControl>
                   <FormDescription>
@@ -212,9 +192,7 @@ export function CreateCommunityModal() {
                   </div>
                 </FormControl>
                 {iconFile && (
-                  <p className="text-xs text-muted-foreground truncate">
-                    {iconFile.name}
-                  </p>
+                  <p className="text-xs text-muted-foreground truncate">{iconFile.name}</p>
                 )}
               </FormItem>
 
@@ -234,9 +212,7 @@ export function CreateCommunityModal() {
                   </div>
                 </FormControl>
                 {bannerFile && (
-                  <p className="text-xs text-muted-foreground truncate">
-                    {bannerFile.name}
-                  </p>
+                  <p className="text-xs text-muted-foreground truncate">{bannerFile.name}</p>
                 )}
               </FormItem>
             </div>

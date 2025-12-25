@@ -19,10 +19,7 @@ export interface ProfileFormData {
   allowDMs: boolean;
 }
 
-export type ProfileFormDataWithoutFiles = Omit<
-  ProfileFormData,
-  "avatar" | "banner"
-> & {
+export type ProfileFormDataWithoutFiles = Omit<ProfileFormData, "avatar" | "banner"> & {
   avatar: WithoutFile<ProfileFormData["avatar"]>;
   banner: WithoutFile<ProfileFormData["banner"]>;
 };
@@ -43,6 +40,7 @@ export interface UpdateProfileDialogProps {
   darkMode: boolean;
   allowDMs: boolean;
   onSave: (data: ProfileFormData) => void;
+  isPending?: boolean;
 }
 
 export type TUser = {

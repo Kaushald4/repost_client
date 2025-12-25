@@ -14,11 +14,8 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Upload, X } from "lucide-react";
-import {
-  ProfileFormData,
-  UpdateProfileDialogProps,
-} from "@/types/profileTypes";
+import { Loader2, Upload, X } from "lucide-react";
+import { ProfileFormData, UpdateProfileDialogProps } from "@/types/profileTypes";
 
 export function UpdateProfileDialog({
   username,
@@ -29,6 +26,7 @@ export function UpdateProfileDialog({
   isPrivate,
   darkMode,
   allowDMs,
+  isPending,
   onSave,
 }: UpdateProfileDialogProps) {
   const [formData, setFormData] = useState<ProfileFormData>({
@@ -42,12 +40,8 @@ export function UpdateProfileDialog({
     allowDMs,
   });
 
-  const [avatarPreview, setAvatarPreview] = useState<string | null>(
-    avatar?.url || null
-  );
-  const [bannerPreview, setBannerPreview] = useState<string | null>(
-    banner?.url || null
-  );
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(avatar?.url || null);
+  const [bannerPreview, setBannerPreview] = useState<string | null>(banner?.url || null);
 
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const bannerInputRef = useRef<HTMLInputElement>(null);
@@ -122,9 +116,7 @@ export function UpdateProfileDialog({
                   <Input
                     id="displayName"
                     value={formData.displayName}
-                    onChange={(e) =>
-                      handleChange("displayName", e.target.value)
-                    }
+                    onChange={(e) => handleChange("displayName", e.target.value)}
                     placeholder="Enter display name"
                   />
                 </div>
@@ -134,9 +126,7 @@ export function UpdateProfileDialog({
                 <div className="flex items-center gap-4 mt-2">
                   <Avatar className="h-16 w-16">
                     <AvatarImage src={avatarPreview || undefined} />
-                    <AvatarFallback>
-                      {formData.username.slice(0, 2).toUpperCase()}
-                    </AvatarFallback>
+                    <AvatarFallback>{formData.username.slice(0, 2).toUpperCase()}</AvatarFallback>
                   </Avatar>
                   <div className="flex gap-2">
                     <Button
@@ -165,9 +155,7 @@ export function UpdateProfileDialog({
                     type="file"
                     accept="image/*"
                     className="hidden"
-                    onChange={(e) =>
-                      handleFileSelect(e.target.files?.[0] || null, "avatar")
-                    }
+                    onChange={(e) => handleFileSelect(e.target.files?.[0] || null, "avatar")}
                   />
                 </div>
               </div>
@@ -205,9 +193,7 @@ export function UpdateProfileDialog({
                     type="file"
                     accept="image/*"
                     className="hidden"
-                    onChange={(e) =>
-                      handleFileSelect(e.target.files?.[0] || null, "banner")
-                    }
+                    onChange={(e) => handleFileSelect(e.target.files?.[0] || null, "banner")}
                   />
                 </div>
               </div>
@@ -225,9 +211,7 @@ export function UpdateProfileDialog({
                 <Switch
                   id="isPrivate"
                   checked={formData.isPrivate}
-                  onCheckedChange={(checked) =>
-                    handleChange("isPrivate", checked)
-                  }
+                  onCheckedChange={(checked) => handleChange("isPrivate", checked)}
                 />
                 <Label htmlFor="isPrivate">Private Profile</Label>
               </div>
@@ -243,9 +227,7 @@ export function UpdateProfileDialog({
                 <Switch
                   id="darkMode"
                   checked={formData.darkMode}
-                  onCheckedChange={(checked) =>
-                    handleChange("darkMode", checked)
-                  }
+                  onCheckedChange={(checked) => handleChange("darkMode", checked)}
                 />
                 <Label htmlFor="darkMode">Dark Mode</Label>
               </div>
@@ -253,9 +235,7 @@ export function UpdateProfileDialog({
                 <Switch
                   id="allowDMs"
                   checked={formData.allowDMs}
-                  onCheckedChange={(checked) =>
-                    handleChange("allowDMs", checked)
-                  }
+                  onCheckedChange={(checked) => handleChange("allowDMs", checked)}
                 />
                 <Label htmlFor="allowDMs">Allow Direct Messages</Label>
               </div>
@@ -264,7 +244,10 @@ export function UpdateProfileDialog({
 
           <div className="flex justify-end space-x-2">
             <Button variant="outline">Cancel</Button>
-            <Button onClick={handleSave}>Save Changes</Button>
+            <Button disabled={isPending} onClick={handleSave}>
+              {isPending && <Loader2 className="animate-spin" />}
+              Save Changes
+            </Button>
           </div>
         </div>
       </DialogContent>

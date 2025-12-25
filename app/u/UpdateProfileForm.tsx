@@ -1,69 +1,83 @@
 "use client";
 
 import { UpdateProfileDialog } from "@/components/profile/update-profile-dialog";
-import { MediaService } from "@/services/media/media.client";
-import {
-  ProfileFormData,
-  ProfileFormDataWithoutFiles,
-} from "@/types/profileTypes";
-import { TUserResponseWrapper } from "@/types/register";
+import { resolveMediaCommand } from "@/lib/mediaUtils";
+import { uploadMediaAction } from "@/services/media/media.action";
+import { updateProfileAction } from "@/services/profile/profile.action";
+import { UpdateProfileFormProps } from "@/types/mediaTypes";
+import { ProfileFormData, ProfileFormDataWithoutFiles } from "@/types/profileTypes";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
-type UpdateProfileFormProps = {
-  user: TUserResponseWrapper["data"];
-};
 const UpdateProfileForm = ({ user }: UpdateProfileFormProps) => {
+  const queryClient = useQueryClient();
+
+  const { mutate: updateProfile, isPending: isProfileUpdating } = useMutation({
+    mutationFn: async (data: ProfileFormDataWithoutFiles) => updateProfileAction(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["profile"] });
+      toast.success("Profile updated successfully!");
+    },
+    onError: () => {
+      toast.error("Failed to update profile. Please try again.");
+    },
+  });
+
+  const { mutateAsync: uploadMedia, isPending: isMediaUploading } = useMutation({
+    mutationFn: async ({ file, folder }: { file: File; folder: string }) =>
+      uploadMediaAction(file, folder),
+    onError: (error) => {
+      console.log(error);
+      toast.error("Failed to upload media. Please try again.");
+    },
+  });
+
+  const isPending = isProfileUpdating || isMediaUploading;
+
   const handleSave = async (data: ProfileFormData) => {
-    const { avatar, banner, ...otherData } = data;
+    const { avatar, banner, ...rest } = data;
 
-    const dataToUpdate: Record<string, unknown> = { ...otherData };
+    const payload: Record<string, unknown> = { ...rest };
 
-    if (data.avatar.file && data.banner.file) {
-      const responses = await Promise.all([
-        MediaService.upload(data.avatar.file, "avatars"),
-        MediaService.upload(data.banner.file, "banners"),
-      ]);
-      dataToUpdate["avatar"] = {
-        fileId: responses[0].data.publicId,
-        url: responses[0].data.url,
+    // Avatar
+    if (avatar.file) {
+      const res = await uploadMedia({ file: avatar.file, folder: "avatars" });
+      payload.avatar = {
+        action: "upsert",
+        fileId: res.data.publicId,
+        url: res.data.url,
       };
-      dataToUpdate["banner"] = {
-        fileId: responses[1].data.publicId,
-        url: responses[1].data.url,
-      };
-    } else if (data.avatar.file) {
-      const response = await MediaService.upload(data.avatar.file, "avatars");
-      dataToUpdate["avatar"] = {
-        fileId: response.data.publicId,
-        url: response.data.url,
-      };
-    } else if (data.banner.file) {
-      const response = await MediaService.upload(data.banner.file, "banners");
-      dataToUpdate["banner"] = {
-        fileId: response.data.publicId,
-        url: response.data.url,
-      };
+    } else {
+      payload.avatar = resolveMediaCommand(avatar, user.avatar ?? undefined);
     }
 
-    // ProfileService.updateProfile(dataToUpdate as ProfileFormDataWithoutFiles)
-    //   .then(() => {
-    //     console.log("Profile updated successfully");
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error updating profile:", error);
-    //   });
+    // Banner
+    if (banner.file) {
+      const res = await uploadMedia({ file: banner.file, folder: "banners" });
+      payload.banner = {
+        action: "upsert",
+        fileId: res.data.publicId,
+        url: res.data.url,
+      };
+    } else {
+      payload.banner = resolveMediaCommand(banner, user.banner ?? undefined);
+    }
+    console.log(payload, "payload");
+    updateProfile(payload as ProfileFormDataWithoutFiles);
   };
 
   return (
     <UpdateProfileDialog
       username={user.username}
       displayName={user.displayName}
-      avatar={user.avatar}
-      banner={user.avatar}
+      avatar={user.avatar ?? { fileId: "", url: "" }}
+      banner={user.banner ?? { fileId: "", url: "" }}
       bio={user.bio}
       isPrivate={user.isPrivate}
-      darkMode={false} // Assuming default
-      allowDMs={true} // Assuming default
+      darkMode={false} // TODO: fetch from user settings
+      allowDMs={true} // TODO: fetch from user settings
       onSave={(data) => handleSave(data)}
+      isPending={isPending}
     />
   );
 };

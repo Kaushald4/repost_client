@@ -12,7 +12,7 @@ export async function serverFetch(input: RequestInfo, init: RequestInit = {}) {
     headers: {
       ...init.headers,
       cookie: cookieHeader,
-      "content-type": "application/json",
+      // "content-type": "application/json",
     },
   });
 }
