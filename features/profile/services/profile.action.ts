@@ -1,8 +1,8 @@
 "use server";
-import { ProfileFormDataWithoutFiles } from "@/types/profileTypes";
 import { UserAPI } from "./profile.api";
 import { serverFetch } from "@/lib/serverFetch";
 import { revalidatePath } from "next/cache";
+import { ProfileFormDataWithoutFiles } from "../types";
 
 export const updateProfileAction = async (data: ProfileFormDataWithoutFiles) => {
   const response = await serverFetch(`${process.env.API_BASE_URL}${UserAPI.updateProfile}`, {

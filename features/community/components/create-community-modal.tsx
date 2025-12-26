@@ -34,11 +34,12 @@ import {
 import { toast } from "sonner";
 import { Loader2, Plus } from "lucide-react";
 import { communityFormSchema, CommunityFormValues } from "../schema";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createCommunityAction } from "../services/community.action";
 import useUploadMutation from "@/hooks/useUploadMutation";
 
 export function CreateCommunityModal() {
+  const queryClient = useQueryClient();
   const [isOpen, setIsOpen] = useState(false);
   const [iconFile, setIconFile] = useState<File | null>(null);
   const [bannerFile, setBannerFile] = useState<File | null>(null);
@@ -69,10 +70,11 @@ export function CreateCommunityModal() {
     mutationFn: async (data: CommunityFormValues) => createCommunityAction(data),
     onSuccess: (data) => {
       toast.success(`r/ created successfully`);
-      // setIconFile(null);
-      // setBannerFile(null);
-      // setIsOpen(false);
-      // form.reset();
+      queryClient.invalidateQueries({ queryKey: ["all-communities"] });
+      setIconFile(null);
+      setBannerFile(null);
+      setIsOpen(false);
+      form.reset();
     },
     onError: (error) => {
       console.log(error, error instanceof Error, "ERROR");
