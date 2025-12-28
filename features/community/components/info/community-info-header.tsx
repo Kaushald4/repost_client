@@ -3,9 +3,10 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Users, Calendar, Eye, Lock, Globe, MoreHorizontal, Settings } from "lucide-react";
+import { Users, Calendar, Eye, Lock, Globe, MoreHorizontal } from "lucide-react";
 import { CommunityPage, ViewerContext } from "../../types";
 import Image from "next/image";
+import { UpdateCommunityModal } from "../update-community-modal";
 
 interface CommunityInfoHeaderProps {
   community: CommunityPage;
@@ -101,12 +102,7 @@ export const CommunityInfoHeader = ({
               </div>
 
               <div className="flex items-center gap-2">
-                {viewerContext.role === "OWNER" && (
-                  <Button variant="outline" size="sm">
-                    <Settings className="h-4 w-4 mr-2" />
-                    Manage
-                  </Button>
-                )}
+                {viewerContext.role === "OWNER" && <UpdateCommunityModal community={community} />}
                 {viewerContext.isLoggedIn && (
                   <Button
                     variant={viewerContext.isMember ? "outline" : "default"}

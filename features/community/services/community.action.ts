@@ -44,3 +44,37 @@ export const getCommunityInfoAction = async (communityName: string) => {
   const responseData = await response.json();
   return responseData;
 };
+
+export const updateCommunityAction = async (
+  communityId: string,
+  data: {
+    title?: string;
+    description?: string;
+    visibility?: string;
+    icon?: {
+      action: "keep" | "update" | "delete";
+      url?: string;
+      fileId?: string;
+      previewUrl?: string;
+    };
+    banner?: {
+      action: "keep" | "update" | "delete";
+      url?: string;
+      fileId?: string;
+      previewUrl?: string;
+    };
+  },
+) => {
+  const response = await serverFetch(
+    `${process.env.API_BASE_URL}${CommunityAPI.updateCommunity}/${communityId}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(data),
+      headers: {
+        "content-type": "application/json",
+      },
+    },
+  );
+  const responseData = await response.json();
+  return responseData;
+};
