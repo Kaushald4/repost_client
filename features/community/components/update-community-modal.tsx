@@ -30,176 +30,31 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Loader2, Settings, X, Upload } from "lucide-react";
+import { Loader2, Settings } from "lucide-react";
 import { updateCommunitySchema, UpdateCommunityFormValues } from "../schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateCommunityAction } from "../services/community.action";
 import useUploadMutation from "@/hooks/useUploadMutation";
 import { CommunityPage } from "../types";
-import Image from "next/image";
 
-interface UpdateCommunityModalProps {
-  community: CommunityPage;
-  trigger?: React.ReactNode;
-}
-
-const MEDIA_ACTIONS = {
-  KEEP: "keep" as const,
-  UPDATE: "update" as const,
-  DELETE: "delete" as const,
-} as const;
-
-type MediaActionType = "keep" | "update" | "delete";
-
-interface MediaState {
-  action: MediaActionType;
-  file: File | null;
-}
-
-function getValidVisibility(visibility: string): "PUBLIC" | "RESTRICTED" | "PRIVATE" {
-  if (visibility === "PUBLIC" || visibility === "RESTRICTED" || visibility === "PRIVATE") {
-    return visibility;
-  }
-  return "PUBLIC";
-}
-
-function getDefaultValues(community: CommunityPage): UpdateCommunityFormValues {
-  return {
-    title: community.title || "",
-    description: community.description || "",
-    visibility: getValidVisibility(community.visibility || "PUBLIC"),
-    icon: {
-      action: community.icon?.url ? MEDIA_ACTIONS.KEEP : MEDIA_ACTIONS.UPDATE,
-      url: community.icon?.url || "",
-      fileId: community.icon?.fileId || "",
-      previewUrl: community.icon?.url || "",
-    },
-    banner: {
-      action: community.banner?.url ? MEDIA_ACTIONS.KEEP : MEDIA_ACTIONS.UPDATE,
-      url: community.banner?.url || "",
-      fileId: community.banner?.fileId || "",
-      previewUrl: community.banner?.url || "",
-    },
-  };
-}
-
-interface MediaSectionProps {
-  type: "icon" | "banner";
-  mediaState: MediaState;
-  setMediaState: React.Dispatch<React.SetStateAction<MediaState>>;
-  existingUrl?: string;
-  hasExistingMedia: boolean;
-}
-
-function MediaSection({
-  type,
-  mediaState,
-  setMediaState,
-  existingUrl,
-  hasExistingMedia,
-}: MediaSectionProps) {
-  const { action, file } = mediaState;
-
-  // Determine what to show:
-  // - If action is DELETE, show nothing (removed)
-  // - If there's a new file uploaded, show the file preview
-  // - If there's existing media and action is KEEP, show existing media
-  // - If no existing media, show upload area
-  const shouldShowPreview = action !== MEDIA_ACTIONS.DELETE && (file || existingUrl);
-  const previewUrl = file ? URL.createObjectURL(file) : existingUrl;
-  const isRemoved = action === MEDIA_ACTIONS.DELETE;
-
-  const handleFileChange = useCallback(
-    (newFile: File | null) => {
-      if (newFile) {
-        setMediaState({ action: MEDIA_ACTIONS.UPDATE, file: newFile });
-      }
-    },
-    [setMediaState],
-  );
-
-  const handleRemove = useCallback(() => {
-    setMediaState({ action: MEDIA_ACTIONS.DELETE, file: null });
-  }, [setMediaState]);
-
-  return (
-    <div className="space-y-3">
-      <FormLabel className="capitalize">{type}</FormLabel>
-
-      {/* Preview with remove button */}
-      {shouldShowPreview && (
-        <div
-          className={`relative ${type === "banner" ? "h-32" : "w-20 h-20"} rounded-lg overflow-hidden bg-muted border group`}
-        >
-          <Image
-            fill
-            src={previewUrl ?? ""}
-            alt={`${type} preview`}
-            className={`w-full h-full object-cover ${type === "banner" ? "" : "rounded-full"}`}
-          />
-          {/* Remove button overlay */}
-          <button
-            type="button"
-            onClick={handleRemove}
-            className="absolute top-2 right-2 p-1 bg-background/90 hover:bg-background rounded-full shadow-sm opacity-0 group-hover:opacity-100 transition-opacity"
-            title={`Remove ${type}`}
-          >
-            <X className="h-4 w-4 text-destructive" />
-          </button>
-        </div>
-      )}
-
-      {/* Upload area - always show when no preview or after removal */}
-      {!shouldShowPreview && (
-        <div className="flex items-center gap-2">
-          <Label
-            htmlFor={`${type}-upload`}
-            className="flex items-center gap-2 cursor-pointer px-4 py-2 border-2 border-dashed border-border hover:border-primary rounded-lg transition-colors"
-          >
-            <Upload className="h-4 w-4 text-muted-foreground" />
-            <span className="text-sm text-muted-foreground">
-              {isRemoved ? `Upload new ${type}` : `Upload ${type}`}
-            </span>
-          </Label>
-          <Input
-            id={`${type}-upload`}
-            type="file"
-            accept="image/*"
-            className="hidden"
-            onChange={(e) => {
-              const selectedFile = e.target.files?.[0];
-              if (selectedFile) handleFileChange(selectedFile);
-            }}
-          />
-        </div>
-      )}
-
-      {/* Show filename when file is uploaded but not removed */}
-      {file && action === MEDIA_ACTIONS.UPDATE && (
-        <p className="text-xs text-muted-foreground">Selected: {file.name}</p>
-      )}
-
-      {/* Show message when media was removed */}
-      {isRemoved && hasExistingMedia && (
-        <p className="text-xs text-destructive">{type} will be removed on save</p>
-      )}
-    </div>
-  );
-}
+import {
+  UpdateCommunityModalProps,
+  MediaState,
+  MEDIA_ACTIONS,
+} from "./update-community-modal/types";
+import { getDefaultValues, createInitialMediaState } from "./update-community-modal/utils";
+import { MediaSection } from "./update-community-modal/MediaSection";
 
 export function UpdateCommunityModal({ community, trigger }: UpdateCommunityModalProps) {
   const queryClient = useQueryClient();
   const [isOpen, setIsOpen] = useState(false);
-  const [iconState, setIconState] = useState<MediaState>(() => ({
-    action: community.icon?.url ? MEDIA_ACTIONS.KEEP : MEDIA_ACTIONS.UPDATE,
-    file: null,
-  }));
-  const [bannerState, setBannerState] = useState<MediaState>(() => ({
-    action: community.banner?.url ? MEDIA_ACTIONS.KEEP : MEDIA_ACTIONS.UPDATE,
-    file: null,
-  }));
+  const [iconState, setIconState] = useState<MediaState>(() =>
+    createInitialMediaState(!!community.icon?.url),
+  );
+  const [bannerState, setBannerState] = useState<MediaState>(() =>
+    createInitialMediaState(!!community.banner?.url),
+  );
 
   const form = useForm<UpdateCommunityFormValues>({
     resolver: zodResolver(updateCommunitySchema),
@@ -231,14 +86,16 @@ export function UpdateCommunityModal({ community, trigger }: UpdateCommunityModa
       if (open) {
         const defaultValues = getDefaultValues(community);
         form.reset(defaultValues);
-        setIconState({
-          action: defaultValues.icon?.action || MEDIA_ACTIONS.UPDATE,
-          file: null,
-        });
-        setBannerState({
-          action: defaultValues.banner?.action || MEDIA_ACTIONS.UPDATE,
-          file: null,
-        });
+        setIconState(
+          createInitialMediaState(
+            !!defaultValues.icon?.url && defaultValues.icon?.action === MEDIA_ACTIONS.KEEP,
+          ),
+        );
+        setBannerState(
+          createInitialMediaState(
+            !!defaultValues.banner?.url && defaultValues.banner?.action === MEDIA_ACTIONS.KEEP,
+          ),
+        );
       }
       setIsOpen(open);
     },
