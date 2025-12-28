@@ -129,23 +129,23 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm">Helper</span>
-                  <span className="text-sm font-semibold">{user.stats.helper}</span>
+                  <span className="text-sm font-semibold">{user.stats?.helper || 0}</span>
                 </div>
-                <Progress value={user.stats.helper} />
+                <Progress value={user.stats?.helper || 0} />
               </div>
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm">Debate</span>
-                  <span className="text-sm font-semibold">{user.stats.debate}</span>
+                  <span className="text-sm font-semibold">{user.stats?.debate || 0}</span>
                 </div>
-                <Progress value={user.stats.debate} />
+                <Progress value={user.stats?.debate || 0} />
               </div>
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm">Creative</span>
-                  <span className="text-sm font-semibold">{user.stats.creative}</span>
+                  <span className="text-sm font-semibold">{user.stats?.creative || 0}</span>
                 </div>
-                <Progress value={user.stats.creative} />
+                <Progress value={user.stats?.creative || 0} />
               </div>
             </div>
           </Card>
@@ -154,8 +154,8 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
           <Card className="p-4">
             <h3 className="font-semibold mb-4">Badges</h3>
             <div className="flex flex-wrap gap-2">
-              {user.badges.map((badge) => (
-                <Badge key={badge.id} variant="outline">
+              {user.badges?.map((badge) => (
+                <Badge key={badge.badgeName} variant="outline">
                   {badge.badgeName}
                 </Badge>
               ))}

@@ -5,19 +5,38 @@ export interface User {
   username: string;
   email: string;
   displayName: string;
-  avatar?: string;
-  banner?: string;
+  avatar?: {
+    url: string;
+    fileId: string;
+  };
+  banner?: {
+    url: string;
+    fileId: string;
+  };
   bio?: string;
   karma: number;
-  reputation: {
+  reputation?: {
     helper: number;
     debate: number;
     creative: number;
   };
-  badges: string[];
+  stats?: {
+    helper: number;
+    debate: number;
+    creative: number;
+  };
+  badges?: Array<{
+    badgeName: string;
+    earnedAt: string;
+  }>;
   level: number;
-  createdAt: Date;
+  createdAt: string;
   isVerified: boolean;
+  isPrivate: boolean;
+  settings?: {
+    darkMode: boolean;
+    allowDMs: boolean;
+  };
 }
 
 export interface Community {

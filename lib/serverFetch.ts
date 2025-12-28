@@ -14,5 +14,6 @@ export async function serverFetch(input: RequestInfo, init: RequestInit = {}) {
       cookie: cookieHeader,
       // "content-type": "application/json",
     },
+    cache: "no-store",
   });
 }

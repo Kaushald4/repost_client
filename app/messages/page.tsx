@@ -97,7 +97,13 @@ export default function MessagesPage() {
                 >
                   <div className="flex gap-3 w-full items-start">
                     <Avatar className="h-10 w-10">
-                      <AvatarImage src={otherUser.avatar} />
+                      <AvatarImage
+                        src={
+                          typeof otherUser.avatar === "string"
+                            ? otherUser.avatar
+                            : otherUser.avatar?.url || ""
+                        }
+                      />
                       <AvatarFallback>
                         {otherUser.username.slice(0, 2).toUpperCase()}
                       </AvatarFallback>
@@ -138,7 +144,13 @@ export default function MessagesPage() {
           <div className="border-b p-4">
             <div className="flex items-center gap-3">
               <Avatar>
-                <AvatarImage src={otherParticipant.avatar} />
+                <AvatarImage
+                  src={
+                    typeof otherParticipant.avatar === "string"
+                      ? otherParticipant.avatar
+                      : otherParticipant.avatar?.url || ""
+                  }
+                />
                 <AvatarFallback>
                   {otherParticipant.username.slice(0, 2).toUpperCase()}
                 </AvatarFallback>
@@ -159,7 +171,13 @@ export default function MessagesPage() {
                   return (
                     <div key={message.id} className={cn("flex gap-3", isOwn && "flex-row-reverse")}>
                       <Avatar className="h-8 w-8">
-                        <AvatarImage src={message.sender.avatar} />
+                        <AvatarImage
+                          src={
+                            typeof message.sender.avatar === "string"
+                              ? message.sender.avatar
+                              : message.sender.avatar?.url || ""
+                          }
+                        />
                         <AvatarFallback className="text-xs">
                           {message.sender.username.slice(0, 2).toUpperCase()}
                         </AvatarFallback>

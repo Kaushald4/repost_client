@@ -5,12 +5,7 @@ import { Comment } from "@/types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  ArrowUp,
-  ArrowDown,
-  MessageSquare,
-  MoreHorizontal,
-} from "lucide-react";
+import { ArrowUp, ArrowDown, MessageSquare, MoreHorizontal } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
@@ -28,12 +23,7 @@ interface CommentItemProps {
   depth?: number;
 }
 
-export function CommentItem({
-  comment,
-  onVote,
-  onReply,
-  depth = 0,
-}: CommentItemProps) {
+export function CommentItem({ comment, onVote, onReply, depth = 0 }: CommentItemProps) {
   const [isReplying, setIsReplying] = useState(false);
   const [replyContent, setReplyContent] = useState("");
 
@@ -64,21 +54,21 @@ export function CommentItem({
     <div className={cn("space-y-2", depth > 0 && "ml-6 pl-4 border-l-2")}>
       <div className="flex gap-3">
         <Avatar className="h-8 w-8 mt-1">
-          <AvatarImage src={comment.author.avatar} />
-          <AvatarFallback>
-            {comment.author.username.slice(0, 2).toUpperCase()}
-          </AvatarFallback>
+          <AvatarImage
+            src={
+              typeof comment.author.avatar === "string"
+                ? comment.author.avatar
+                : comment.author.avatar?.url || ""
+            }
+          />
+          <AvatarFallback>{comment.author.username.slice(0, 2).toUpperCase()}</AvatarFallback>
         </Avatar>
 
         <div className="flex-1 min-w-0">
           {/* Comment Header */}
           <div className="flex items-center gap-2 flex-wrap mb-1">
-            <span className="text-sm font-semibold">
-              {comment.author.displayName}
-            </span>
-            <span className="text-xs text-muted-foreground">
-              u/{comment.author.username}
-            </span>
+            <span className="text-sm font-semibold">{comment.author.displayName}</span>
+            <span className="text-xs text-muted-foreground">u/{comment.author.username}</span>
             <span className="text-xs text-muted-foreground">•</span>
             <span className="text-xs text-muted-foreground">
               {formatDistanceToNow(new Date(comment.createdAt), {
@@ -95,10 +85,7 @@ export function CommentItem({
             <Button
               variant="ghost"
               size="sm"
-              className={cn(
-                "h-7 px-2",
-                comment.userVote === "up" && "text-orange-500"
-              )}
+              className={cn("h-7 px-2", comment.userVote === "up" && "text-orange-500")}
               onClick={() => handleVote("up")}
             >
               <ArrowUp className="h-3 w-3 mr-1" />
@@ -108,10 +95,7 @@ export function CommentItem({
             <Button
               variant="ghost"
               size="sm"
-              className={cn(
-                "h-7 px-2",
-                comment.userVote === "down" && "text-blue-500"
-              )}
+              className={cn("h-7 px-2", comment.userVote === "down" && "text-blue-500")}
               onClick={() => handleVote("down")}
             >
               <ArrowDown className="h-3 w-3" />
@@ -135,9 +119,7 @@ export function CommentItem({
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem>Report</DropdownMenuItem>
-                <DropdownMenuItem className="text-destructive">
-                  Delete
-                </DropdownMenuItem>
+                <DropdownMenuItem className="text-destructive">Delete</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>

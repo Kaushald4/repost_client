@@ -30,3 +30,17 @@ export const getAllCommunitiesAction = async () => {
   const responseData = await resposne.json();
   return responseData as TAllCommunityResponse;
 };
+
+export const getCommunityInfoAction = async (communityName: string) => {
+  const response = await serverFetch(
+    `${process.env.API_BASE_URL}${CommunityAPI.getCommunityInfo}/${communityName}`,
+    {
+      method: "GET",
+      headers: {
+        "content-type": "application/json",
+      },
+    },
+  );
+  const responseData = await response.json();
+  return responseData;
+};

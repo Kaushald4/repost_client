@@ -33,7 +33,13 @@ export default async function UserNav() {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon" className="rounded-full">
           <Avatar className="h-8 w-8">
-            <AvatarImage src={currentUser.avatar.url} />
+            <AvatarImage
+              src={
+                typeof currentUser.avatar === "string"
+                  ? currentUser.avatar
+                  : currentUser.avatar?.url || ""
+              }
+            />
             <AvatarFallback>{currentUser.username.slice(0, 2).toUpperCase()}</AvatarFallback>
           </Avatar>
         </Button>

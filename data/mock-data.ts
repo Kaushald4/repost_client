@@ -1,13 +1,5 @@
 // Mock Data for Development
-import {
-  User,
-  Community,
-  Post,
-  Comment,
-  Notification,
-  Conversation,
-  Message,
-} from "@/types";
+import { User, Community, Post, Comment, Notification, Conversation, Message } from "@/types";
 import { TUser } from "@/types/profileTypes";
 
 export const mockUsers: TUser[] = [
@@ -17,48 +9,38 @@ export const mockUsers: TUser[] = [
     displayName: "Tech Master",
     email: "tech@example.com",
     avatar: {
-      fileId: "file_1",
       url: "https://api.dicebear.com/7.x/avataaars/svg?seed=techmaster",
+      fileId: "file_1",
     },
     banner: {
-      fileId: "banner_1",
       url: "https://placehold.co/1200x400/333/FFF?text=Tech+Master",
+      fileId: "banner_1",
     },
     bio: "Software engineer and tech enthusiast. Love to discuss latest trends in AI and web development.",
-    isPrivate: false,
-    darkMode: false,
-    allowDMs: true,
     karma: 15420,
-    level: 12,
-    createdAt: "2022-11-05T00:00:00.000Z",
+    reputation: {
+      helper: 85,
+      debate: 72,
+      creative: 68,
+    },
     stats: {
-      id: "stats_1",
-      userId: "1",
       helper: 85,
       debate: 72,
       creative: 68,
     },
     badges: [
-      {
-        id: "badge_1_0",
-        userId: "1",
-        badgeName: "Early Adopter",
-        earnedAt: "2024-01-15T00:00:00.000Z",
-      },
-      {
-        id: "badge_1_1",
-        userId: "1",
-        badgeName: "Top Contributor",
-        earnedAt: "2024-02-10T00:00:00.000Z",
-      },
-      {
-        id: "badge_1_2",
-        userId: "1",
-        badgeName: "AI Expert",
-        earnedAt: "2024-03-05T00:00:00.000Z",
-      },
+      { badgeName: "Early Adopter", earnedAt: "2024-01-15T00:00:00.000Z" },
+      { badgeName: "Top Contributor", earnedAt: "2024-02-10T00:00:00.000Z" },
+      { badgeName: "AI Expert", earnedAt: "2024-03-05T00:00:00.000Z" },
     ],
+    level: 12,
+    createdAt: "2022-11-05T00:00:00.000Z",
     isVerified: true,
+    isPrivate: false,
+    settings: {
+      darkMode: false,
+      allowDMs: true,
+    },
   },
   {
     id: "2",
@@ -66,42 +48,37 @@ export const mockUsers: TUser[] = [
     displayName: "Design Pro",
     email: "design@example.com",
     avatar: {
-      fileId: "file_2",
       url: "https://api.dicebear.com/7.x/avataaars/svg?seed=designpro",
+      fileId: "file_2",
     },
     banner: {
-      fileId: "banner_2",
       url: "https://placehold.co/1200x400/333/FFF?text=Design+Pro",
+      fileId: "banner_2",
     },
     bio: "UI/UX designer passionate about creating beautiful and functional interfaces.",
-    isPrivate: false,
-    darkMode: true,
-    allowDMs: true,
     karma: 12350,
-    level: 10,
+    reputation: {
+      helper: 78,
+      debate: 65,
+      creative: 92,
+    },
     stats: {
-      id: "stats_2",
-      userId: "2",
       helper: 78,
       debate: 65,
       creative: 92,
     },
     badges: [
-      {
-        id: "badge_2_0",
-        userId: "2",
-        badgeName: "Design Guru",
-        earnedAt: "2024-02-20T00:00:00.000Z",
-      },
-      {
-        id: "badge_2_1",
-        userId: "2",
-        badgeName: "Creative Mind",
-        earnedAt: "2024-03-15T00:00:00.000Z",
-      },
+      { badgeName: "Design Guru", earnedAt: "2024-02-20T00:00:00.000Z" },
+      { badgeName: "Creative Mind", earnedAt: "2024-03-15T00:00:00.000Z" },
     ],
+    level: 10,
     createdAt: "2023-03-12T00:00:00.000Z",
     isVerified: false,
+    isPrivate: false,
+    settings: {
+      darkMode: true,
+      allowDMs: true,
+    },
   },
 
   {
@@ -110,42 +87,37 @@ export const mockUsers: TUser[] = [
     displayName: "Code Wizard",
     email: "code@example.com",
     avatar: {
-      fileId: "file_3",
       url: "https://api.dicebear.com/7.x/avataaars/svg?seed=codewizard",
+      fileId: "file_3",
     },
     banner: {
-      fileId: "banner_3",
       url: "https://placehold.co/1200x400/333/FFF?text=Code+Wizard",
+      fileId: "banner_3",
     },
     bio: "Full-stack developer. Python, JavaScript, and everything in between.",
-    isPrivate: false,
-    darkMode: false,
-    allowDMs: true,
     karma: 9870,
-    level: 9,
+    reputation: {
+      helper: 90,
+      debate: 70,
+      creative: 60,
+    },
     stats: {
-      id: "stats_3",
-      userId: "3",
       helper: 90,
       debate: 70,
       creative: 60,
     },
     badges: [
-      {
-        id: "badge_3_0",
-        userId: "3",
-        badgeName: "Problem Solver",
-        earnedAt: "2024-03-10T00:00:00.000Z",
-      },
-      {
-        id: "badge_3_1",
-        userId: "3",
-        badgeName: "Code Master",
-        earnedAt: "2024-04-01T00:00:00.000Z",
-      },
+      { badgeName: "Problem Solver", earnedAt: "2024-03-10T00:00:00.000Z" },
+      { badgeName: "Code Master", earnedAt: "2024-04-01T00:00:00.000Z" },
     ],
+    level: 9,
     createdAt: "2023-06-22T00:00:00.000Z",
     isVerified: true,
+    isPrivate: false,
+    settings: {
+      darkMode: false,
+      allowDMs: true,
+    },
   },
 ];
 
@@ -173,8 +145,7 @@ export const mockCommunities: Community[] = [
     id: "2",
     name: "design",
     displayName: "Design",
-    description:
-      "Share your designs, get feedback, and discuss design principles.",
+    description: "Share your designs, get feedback, and discuss design principles.",
     icon: "🎨",
     memberCount: 189000,
     rules: [
@@ -209,8 +180,7 @@ export const mockCommunities: Community[] = [
     id: "4",
     name: "webdev",
     displayName: "Web Development",
-    description:
-      "Everything about web development - from HTML/CSS to modern frameworks.",
+    description: "Everything about web development - from HTML/CSS to modern frameworks.",
     icon: "🌐",
     memberCount: 178000,
     rules: ["Be helpful", "No low-effort posts", "Share resources"],
@@ -255,9 +225,7 @@ export const mockPosts: Post[] = [
     createdAt: new Date("2025-12-18T14:20:00"),
     isAnonymous: false,
     flair: "Showcase",
-    images: [
-      "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=800",
-    ],
+    images: ["https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=800"],
     userVote: null,
     isSaved: true,
   },
@@ -318,8 +286,7 @@ export const mockComments: Record<string, Comment[]> = {
   "1": [
     {
       id: "c1",
-      content:
-        "The streaming improvements are game-changing! My app loads so much faster now.",
+      content: "The streaming improvements are game-changing! My app loads so much faster now.",
       author: mockUsers[1],
       postId: "1",
       upvotes: 45,
@@ -343,8 +310,7 @@ export const mockComments: Record<string, Comment[]> = {
     },
     {
       id: "c2",
-      content:
-        "Has anyone tried the new middleware features? Worth the upgrade?",
+      content: "Has anyone tried the new middleware features? Worth the upgrade?",
       author: mockUsers[2],
       postId: "1",
       upvotes: 23,
@@ -361,8 +327,7 @@ export const mockNotifications: Notification[] = [
     id: "1",
     type: "reply",
     title: "New reply to your comment",
-    content:
-      'designpro replied to your comment in "What are your thoughts on Next.js 15?"',
+    content: 'designpro replied to your comment in "What are your thoughts on Next.js 15?"',
     actor: mockUsers[1],
     targetId: "c1",
     read: false,
@@ -373,8 +338,7 @@ export const mockNotifications: Notification[] = [
     id: "2",
     type: "upvote",
     title: "Your post is trending!",
-    content:
-      'Your post "Best practices for React Server Components" has received 1000+ upvotes',
+    content: 'Your post "Best practices for React Server Components" has received 1000+ upvotes',
     targetId: "4",
     read: false,
     createdAt: new Date("2025-12-19T09:30:00"),

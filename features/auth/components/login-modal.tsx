@@ -11,9 +11,13 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { LoginForm } from "./login-form";
+import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 
 export function LoginModal() {
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
+  const queryClient = useQueryClient();
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -27,7 +31,13 @@ export function LoginModal() {
             Enter your email and password to access your account.
           </DialogDescription>
         </DialogHeader>
-        <LoginForm onSuccess={() => setIsOpen(false)} />
+        <LoginForm
+          onSuccess={() => {
+            setIsOpen(false);
+            queryClient.clear();
+            router.refresh();
+          }}
+        />
       </DialogContent>
     </Dialog>
   );

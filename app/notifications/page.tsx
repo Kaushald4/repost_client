@@ -4,11 +4,7 @@
 import { useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import {@/components/ui/avatar
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/app/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useNotificationStore } from "@/stores/notification.store";
 import { Notification } from "@/types";
 import { Bell, MessageSquare, ArrowUp, AtSign, X, Check } from "lucide-react";
@@ -36,13 +32,8 @@ const getNotificationIcon = (type: Notification["type"]) => {
 };
 
 export default function NotificationsPage() {
-  const {
-    notifications,
-    fetchNotifications,
-    markAsRead,
-    markAllAsRead,
-    deleteNotification,
-  } = useNotificationStore();
+  const { notifications, fetchNotifications, markAsRead, markAllAsRead, deleteNotification } =
+    useNotificationStore();
 
   useEffect(() => {
     fetchNotifications();
@@ -60,9 +51,7 @@ export default function NotificationsPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold mb-2">Notifications</h1>
-          <p className="text-muted-foreground">
-            Stay updated with your activity
-          </p>
+          <p className="text-muted-foreground">Stay updated with your activity</p>
         </div>
         {notifications.some((n) => !n.read) && (
           <Button variant="outline" onClick={markAllAsRead}>
@@ -86,7 +75,7 @@ export default function NotificationsPage() {
                 <Card
                   className={cn(
                     "p-4 hover:bg-accent/50 transition-colors cursor-pointer",
-                    !notification.read && "bg-primary/5 border-primary/20"
+                    !notification.read && "bg-primary/5 border-primary/20",
                   )}
                 >
                   <div className="flex gap-4">
@@ -95,7 +84,7 @@ export default function NotificationsPage() {
                         "flex h-10 w-10 items-center justify-center rounded-full",
                         !notification.read
                           ? "bg-primary/10 text-primary"
-                          : "bg-muted text-muted-foreground"
+                          : "bg-muted text-muted-foreground",
                       )}
                     >
                       <Icon className="h-5 w-5" />
@@ -103,16 +92,11 @@ export default function NotificationsPage() {
 
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-2 mb-1">
-                        <h3 className="font-semibold text-sm">
-                          {notification.title}
-                        </h3>
+                        <h3 className="font-semibold text-sm">{notification.title}</h3>
                         <span className="text-xs text-muted-foreground whitespace-nowrap">
-                          {formatDistanceToNow(
-                            new Date(notification.createdAt),
-                            {
-                              addSuffix: true,
-                            }
-                          )}
+                          {formatDistanceToNow(new Date(notification.createdAt), {
+                            addSuffix: true,
+                          })}
                         </span>
                       </div>
 
@@ -123,11 +107,15 @@ export default function NotificationsPage() {
                       {notification.actor && (
                         <div className="flex items-center gap-2 mt-2">
                           <Avatar className="h-5 w-5">
-                            <AvatarImage src={notification.actor.avatar} />
+                            <AvatarImage
+                              src={
+                                typeof notification.actor.avatar === "string"
+                                  ? notification.actor.avatar
+                                  : notification.actor.avatar?.url || ""
+                              }
+                            />
                             <AvatarFallback className="text-xs">
-                              {notification.actor.username
-                                .slice(0, 2)
-                                .toUpperCase()}
+                              {notification.actor.username.slice(0, 2).toUpperCase()}
                             </AvatarFallback>
                           </Avatar>
                           <span className="text-xs text-muted-foreground">

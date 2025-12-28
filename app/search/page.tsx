@@ -4,23 +4,14 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState, Suspense } from "react";
 import { PostCard } from "@/components/post-card";
 import { Card } from "@/components/ui/card";
-import {@/components/ui/tabs
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/app/components/ui/tabs";
-import { PostService } from "@/services/post.service"@/components/ui/avatar
-import { CommunityServic@/components/ui/buttonnity.service";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { PostService } from "@/services/post.service";
+import { CommunityService } from "@/services/community.service";
 import { Post, Community } from "@/types";
 import { Loader2, Search as SearchIcon, Users } from "lucide-react";
 import Link from "next/link";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/app/components/ui/avatar";
-import { Button } from "@/app/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 
 function SearchContent() {
   const searchParams = useSearchParams();
@@ -58,9 +49,7 @@ function SearchContent() {
       <Tabs defaultValue="posts" className="w-full">
         <TabsList className="mb-6">
           <TabsTrigger value="posts">Posts ({posts.length})</TabsTrigger>
-          <TabsTrigger value="communities">
-            Communities ({communities.length})
-          </TabsTrigger>
+          <TabsTrigger value="communities">Communities ({communities.length})</TabsTrigger>
         </TabsList>
 
         <TabsContent value="posts" className="space-y-4">
@@ -86,20 +75,14 @@ function SearchContent() {
           ) : communities.length > 0 ? (
             <div className="grid gap-4">
               {communities.map((community) => (
-                <Card
-                  key={community.id}
-                  className="p-4 flex items-center justify-between"
-                >
+                <Card key={community.id} className="p-4 flex items-center justify-between">
                   <div className="flex items-center gap-4">
                     <Avatar className="h-12 w-12">
                       <AvatarImage src={community.icon} />
                       <AvatarFallback>{community.name[0]}</AvatarFallback>
                     </Avatar>
                     <div>
-                      <Link
-                        href={`/r/${community.name}`}
-                        className="font-semibold hover:underline"
-                      >
+                      <Link href={`/r/${community.name}`} className="font-semibold hover:underline">
                         r/{community.name}
                       </Link>
                       <p className="text-sm text-muted-foreground">

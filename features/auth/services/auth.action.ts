@@ -2,6 +2,7 @@
 
 import { AUTH_ENDPOINT } from "@/endpoint";
 import { TLoginRequest } from "@/types/register";
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import setCookieParser from "set-cookie-parser";
 
@@ -10,6 +11,8 @@ export const logoutAction = async () => {
   cookieStore.delete("refresh_token");
   cookieStore.delete("refresh_token_id");
   cookieStore.delete("access_token");
+  revalidatePath("/", "layout");
+
   return { success: true };
 };
 
@@ -48,6 +51,7 @@ export const loginAction = async (data: TLoginRequest) => {
         expires: c.expires,
       });
     }
+    revalidatePath("/", "layout");
 
     if (response.ok) {
       return { success: true };
