@@ -3,4 +3,6 @@ export const CommunityAPI = {
   getAllCommunities: "/community/all-communities",
   getCommunityInfo: "/community/community-info",
   updateCommunity: "/community/update",
+  joinCommunity: "/community/join",
+  leaveCommunity: "/community/leave",
 };

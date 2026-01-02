@@ -42,10 +42,25 @@ export interface CommunityPage {
 }
 
 export interface ViewerContext {
-  isLoggedIn: boolean;
+  isAuthenticated: boolean;
+  membership: Membership;
+  role: Role;
+  communityContext: CommunityContext;
+}
+
+export interface Membership {
   isMember: boolean;
-  role: string | null;
+  memberStatus: number;
+  isBanned: boolean;
+}
+
+export interface Role {
   isOwner: boolean;
+  isModerator: boolean;
+}
+
+export interface CommunityContext {
+  visibility: number;
 }
 
 export interface Community {

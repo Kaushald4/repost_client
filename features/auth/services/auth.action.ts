@@ -29,6 +29,8 @@ export const loginAction = async (data: TLoginRequest) => {
       body: JSON.stringify(data),
     });
 
+    const r = await response.json();
+    console.log(r);
     if (!response.ok) {
       return { success: false, error: "Login failed" };
     }
@@ -57,6 +59,7 @@ export const loginAction = async (data: TLoginRequest) => {
       return { success: true };
     }
   } catch (error) {
+    console.log(error);
     return { success: false, error };
   }
 };

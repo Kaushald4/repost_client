@@ -78,3 +78,31 @@ export const updateCommunityAction = async (
   const responseData = await response.json();
   return responseData;
 };
+
+export const joinCommunityAction = async (communityId: string) => {
+  const response = await serverFetch(
+    `${process.env.API_BASE_URL}${CommunityAPI.joinCommunity}/${communityId}`,
+    {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+    },
+  );
+  const responseData = await response.json();
+  return responseData;
+};
+
+export const leaveCommunityAction = async (communityId: string) => {
+  const response = await serverFetch(
+    `${process.env.API_BASE_URL}${CommunityAPI.leaveCommunity}/${communityId}`,
+    {
+      method: "DELETE",
+      headers: {
+        "content-type": "application/json",
+      },
+    },
+  );
+  const responseData = await response.json();
+  return responseData;
+};

@@ -7,12 +7,14 @@ import { Users, Calendar, Eye, Lock, Globe, MoreHorizontal } from "lucide-react"
 import { CommunityPage, ViewerContext } from "../../types";
 import Image from "next/image";
 import { UpdateCommunityModal } from "../update-community-modal";
+import { PermissionsType } from "../../utils";
 
 interface CommunityInfoHeaderProps {
   community: CommunityPage;
-  viewerContext: ViewerContext;
+  viewerContext: PermissionsType;
   onJoinToggle: () => void;
   onLeaveToggle: () => void;
+  isPending?: boolean;
 }
 
 export const CommunityInfoHeader = ({
@@ -20,11 +22,14 @@ export const CommunityInfoHeader = ({
   viewerContext,
   onJoinToggle,
   onLeaveToggle,
+  isPending = false,
 }: CommunityInfoHeaderProps) => {
+  console.log(viewerContext);
+
   const handleJoinLeave = () => {
-    if (viewerContext.isMember) {
+    if (viewerContext.canLeave) {
       onLeaveToggle();
-    } else {
+    } else if (viewerContext.canJoin) {
       onJoinToggle();
     }
   };
@@ -102,14 +107,21 @@ export const CommunityInfoHeader = ({
               </div>
 
               <div className="flex items-center gap-2">
-                {viewerContext.role === "OWNER" && <UpdateCommunityModal community={community} />}
-                {viewerContext.isLoggedIn && (
+                {viewerContext.isOwner && <UpdateCommunityModal community={community} />}
+                {viewerContext.auth.isAuthenticated && (
                   <Button
-                    variant={viewerContext.isMember ? "outline" : "default"}
+                    variant={viewerContext.canJoin ? "outline" : "default"}
                     size="sm"
                     onClick={handleJoinLeave}
+                    disabled={isPending}
                   >
-                    {viewerContext.isMember ? "Joined" : "Join"}
+                    {isPending
+                      ? !viewerContext.canJoin
+                        ? "Leaving..."
+                        : "Joining..."
+                      : viewerContext.canLeave
+                      ? "Leave"
+                      : "Join"}
                   </Button>
                 )}
                 <Button variant="outline" size="sm">

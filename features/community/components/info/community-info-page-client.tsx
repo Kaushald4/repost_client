@@ -14,6 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { CommunityPage, ViewerContext } from "@/features/community/types";
+import { resolveCommunityPermissions } from "../../utils";
 
 export interface CommunityInfoPageClientProps {
   initialCommunity: CommunityPage;
@@ -41,8 +42,10 @@ export const CommunityInfoPageClient = ({
   const community = data?.community || initialCommunity;
   const viewerContext = data?.viewerContext || initialViewerContext;
 
-  const isLoggedIn = !!viewerContext?.isLoggedIn;
-  const isOwner = viewerContext?.role === "owner";
+  const mappedViewerContext = resolveCommunityPermissions(viewerContext);
+
+  const isLoggedIn = !!mappedViewerContext.auth.isAuthenticated;
+  const isOwner = mappedViewerContext.isOwner;
 
   const availableTabs = ["posts", "about", "members"];
 
@@ -53,31 +56,27 @@ export const CommunityInfoPageClient = ({
   const handleJoinCommunity = async () => {
     if (!community || !isLoggedIn) return;
 
-    startTransition(() => {
-      joinMutation.mutate(
-        { communityId: community.id },
-        {
-          onSuccess: () => {
-            refetch();
-          },
+    joinMutation.mutate(
+      { communityId: community.id },
+      {
+        onSuccess: () => {
+          refetch();
         },
-      );
-    });
+      },
+    );
   };
 
   const handleLeaveCommunity = async () => {
     if (!community || !isLoggedIn) return;
 
-    startTransition(() => {
-      leaveMutation.mutate(
-        { communityId: community.id },
-        {
-          onSuccess: () => {
-            refetch();
-          },
+    leaveMutation.mutate(
+      { communityId: community.id },
+      {
+        onSuccess: () => {
+          refetch();
         },
-      );
-    });
+      },
+    );
   };
 
   if (isError) {
@@ -99,9 +98,10 @@ export const CommunityInfoPageClient = ({
         <Card className="mb-6 overflow-hidden p-0">
           <CommunityInfoHeader
             community={community}
-            viewerContext={viewerContext}
+            viewerContext={mappedViewerContext}
             onJoinToggle={handleJoinCommunity}
             onLeaveToggle={handleLeaveCommunity}
+            isPending={joinMutation.isPending || leaveMutation.isPending}
           />
         </Card>
 
